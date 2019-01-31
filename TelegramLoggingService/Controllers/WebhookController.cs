@@ -16,8 +16,6 @@ namespace TelegramLoggingService.Controllers
 		[HttpPost]
 		public IActionResult Post([FromBody]UpdateViewModel model)
 		{
-
-
 			return Ok();
 		}
 	}
