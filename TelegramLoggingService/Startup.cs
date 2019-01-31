@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using TelegramLoggingService.IoC;
+using TelegramLoggingService.WebhookConfig;
 
 namespace TelegramLoggingService
 {
@@ -36,6 +37,11 @@ namespace TelegramLoggingService
 			services.AddDbContext<ApplicationContext>(options =>
 			{
 				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+			});
+
+			services.AddHttpClient("TelegramClient", configureClient =>
+			{
+				configureClient.BaseAddress = new Uri("https://api.telegram.org/bot{settings.BotToken}/");
 			});
 
 			services.AddSwaggerGen(c =>
@@ -63,6 +69,10 @@ namespace TelegramLoggingService
 			{
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 			});
+
+			WebhookConfigurator.Configure(new WebhookSettings(
+				Configuration["TelegramBotSettings:BotToken"].ToString(),
+				Configuration["TelegramBotSettings:WebhookUri"].ToString()));
 
 			app.UseMvc();
 		}
