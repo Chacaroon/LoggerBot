@@ -17,7 +17,7 @@ namespace TelegramLoggingService.WebhookConfig
 				var res = client.PostAsJsonAsync("setWebhook", new
 				{
 					url = settings.WebhookUri,
-					allowed_updates = new[] { "message" }
+					allowed_updates = new[] { "message", "callback_query" }
 				}).Result;
 
 				res.EnsureSuccessStatusCode();
