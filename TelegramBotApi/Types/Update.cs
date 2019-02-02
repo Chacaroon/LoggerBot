@@ -3,7 +3,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TelegramBotApi.Types.InlineKeyboard;
+using TelegramBotApi.Types.ReplyMarkup;
 
 namespace TelegramBotApi.Types
 {

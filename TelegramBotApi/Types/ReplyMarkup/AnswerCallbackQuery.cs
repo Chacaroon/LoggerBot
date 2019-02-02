@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TelegramBotApi.Types.InlineKeyboard
+namespace TelegramBotApi.Types.ReplyMarkup
 {
 	[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
 	public class AnswerCallbackQuery

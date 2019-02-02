@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace TelegramBotApi.Types.InlineKeyboard
+namespace TelegramBotApi.Types.ReplyMarkup
 {
 	[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
 	public class CallbackQuery
