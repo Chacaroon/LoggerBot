@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace SharedKernel.PL.ViewModels
+namespace TelegramBotApi.Types
 {
 	[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-	public class UserViewModel
+	public class User
 	{
 		public long Id { get; set; }
 

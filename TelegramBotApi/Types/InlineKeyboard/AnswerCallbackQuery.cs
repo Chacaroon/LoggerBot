@@ -4,14 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SharedKernel.PL.ViewModels
+namespace TelegramBotApi.Types.InlineKeyboard
 {
 	[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-	public class UpdateViewModel
+	public class AnswerCallbackQuery
 	{
-		[JsonProperty("update_id")]
-		public int Id { get; set; }
-
-		public MessageViewModel Message { get; set; }
+		public string CallbackQueryId { get; set; }
+		public string Text { get; set; }
 	}
 }

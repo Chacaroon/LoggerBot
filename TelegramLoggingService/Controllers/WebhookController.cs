@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using SharedKernel.PL.ViewModels;
+using TelegramBotApi.Types;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,7 +14,7 @@ namespace TelegramLoggingService.Controllers
 	{
 		// POST: api/<controller>
 		[HttpPost]
-		public IActionResult Post([FromBody]UpdateViewModel model)
+		public IActionResult Post([FromBody]Update model)
 		{
 			return Ok();
 		}

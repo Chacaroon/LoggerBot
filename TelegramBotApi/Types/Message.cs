@@ -3,17 +3,19 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
 
-namespace SharedKernel.PL.ViewModels
+namespace TelegramBotApi.Types
 {
 	[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-	public class MessageViewModel
+	public class Message
 	{
-		public long MessageId { get; set; }
+		[JsonProperty("message_id")]
+		public long Id { get; set; }
 
-		public UserViewModel From { get; set; }
-		public ChatViewModel Chat { get; set; }
-
+		public User From { get; set; }
 		[JsonConverter(typeof(UnixDateTimeConverter))]
 		public DateTime Date { get; set; }
+		public Chat Chat { get; set; }
+		public string Text { get; set; }
+
 	}
 }

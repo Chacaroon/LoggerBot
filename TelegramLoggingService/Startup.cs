@@ -13,8 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
+using TelegramBotApi;
 using TelegramLoggingService.IoC;
-using TelegramLoggingService.WebhookConfig;
 
 namespace TelegramLoggingService
 {
@@ -32,16 +32,13 @@ namespace TelegramLoggingService
 		{
 			services.AddRepositories();
 
+			services.AddServices(Configuration);
+
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 			services.AddDbContext<ApplicationContext>(options =>
 			{
 				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-			});
-
-			services.AddHttpClient("TelegramClient", configureClient =>
-			{
-				configureClient.BaseAddress = new Uri("https://api.telegram.org/bot{settings.BotToken}/");
 			});
 
 			services.AddSwaggerGen(c =>
@@ -51,7 +48,7 @@ namespace TelegramLoggingService
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ITelegramBot telegramBot)
 		{
 			if (env.IsDevelopment())
 			{
@@ -64,15 +61,15 @@ namespace TelegramLoggingService
 				app.UseHttpsRedirection();
 			}
 
+			telegramBot.SetWebhook(
+				Configuration["TelegramBotSettings:WebhookUri"],
+				Configuration.GetSection("TelegramBotSettings").GetSection("AllowedUpdates").Get<string[]>());
+
 			app.UseSwagger();
 			app.UseSwaggerUI(c =>
 			{
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 			});
-
-			WebhookConfigurator.Configure(new WebhookSettings(
-				Configuration["TelegramBotSettings:BotToken"].ToString(),
-				Configuration["TelegramBotSettings:WebhookUri"].ToString()));
 
 			app.UseMvc();
 		}
