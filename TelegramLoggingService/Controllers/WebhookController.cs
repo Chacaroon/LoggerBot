@@ -12,9 +12,11 @@ namespace TelegramLoggingService.Controllers
 	[Route("api/[controller]")]
 	public class WebhookController : Controller
 	{
+		public WebhookController() { }
+
 		// POST: api/<controller>
 		[HttpPost]
-		public IActionResult Post([FromBody]Update model)
+		public IActionResult Post([FromBody]Update update)
 		{
 			return Ok();
 		}

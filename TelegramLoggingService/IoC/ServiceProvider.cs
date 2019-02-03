@@ -1,5 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BLL;
+using BLL.CommandHandlers;
+using BLL.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SharedKernel.BLL.Interfaces;
+using SharedKernel.BLL.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +21,9 @@ namespace TelegramLoggingService.IoC
 			{
 				configureClient.BaseAddress = new Uri(String.Format("https://api.telegram.org/bot{0}/", configuration["TelegramBotSettings:BotToken"]));
 			});
+
+			services.AddTransient<IMessageService, MessageService>();
+			services.AddTransient<ICallbackQueryService, CallbackQueryService>();
 		}
 	}
 }

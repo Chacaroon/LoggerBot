@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Text.RegularExpressions;
 
 namespace TelegramBotApi.Types
 {
@@ -17,5 +18,17 @@ namespace TelegramBotApi.Types
 		public Chat Chat { get; set; }
 		public string Text { get; set; }
 
+
+		private Regex _commandRegex = new Regex(@"^/(w*)$");
+
+		public bool IsCommand()
+		{
+			return _commandRegex.IsMatch(Text);
+		}
+
+		public string GetCommand()
+		{
+			return _commandRegex.Match(Text).Groups[1].Value;
+		}
 	}
 }

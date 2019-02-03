@@ -34,6 +34,8 @@ namespace TelegramLoggingService
 
 			services.AddServices(Configuration);
 
+			services.AddCommands();
+
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
 			services.AddDbContext<ApplicationContext>(options =>

@@ -14,7 +14,16 @@ namespace TelegramBotApi.Types
 		public long Id { get; set; }
 
 		public Message Message { get; set; }
-		public Message EditedMessage { get; set; }
 		public CallbackQuery CallbackQuery { get; set; }
+
+		public bool IsMessage()
+		{
+			return Message != null;
+		}
+
+		public bool IsCallbackQuery()
+		{
+			return CallbackQuery != null;
+		}
 	}
 }
