@@ -4,9 +4,9 @@ using System.Text;
 
 namespace TelegramBotApi.Types
 {
-	public class ParseMode
+	public enum ParseMode
 	{
-		public static string Markdown { get; } = "Markdown";
-		public static string HTML { get; } = "HTML";
+		Markdown,
+		HTML
 	}
 }

@@ -19,7 +19,7 @@ namespace TelegramBotApi.Types
 		public string Text { get; set; }
 
 
-		private Regex _commandRegex = new Regex(@"^/(w*)$");
+		private Regex _commandRegex = new Regex(@"^/(\w*)$");
 
 		public bool IsCommand()
 		{

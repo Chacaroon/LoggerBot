@@ -33,14 +33,14 @@ namespace TelegramBotApi.Types.Requests
 		public SendMessageRequest(
 			long chatId,
 			string text,
-			string parseMode,
+			ParseMode parseMode,
 			bool disableWebPagePreview,
 			bool disableNotification,
 			long replyToMessageId,
 			IReplyMarkup replyMarkup)
 			: this(chatId, text)
 		{
-			ParseMode = parseMode;
+			ParseMode = parseMode.ToString();
 			DisableWebPagePreview = disableWebPagePreview;
 			DisableNotification = disableNotification;
 			ReplyToMessageId = replyToMessageId;

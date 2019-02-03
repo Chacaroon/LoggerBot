@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TelegramBotApi.Types;
 using TelegramBotApi.Types.Abstraction;
 
 namespace TelegramBotApi
@@ -16,7 +17,7 @@ namespace TelegramBotApi
 		Task<HttpResponseMessage> SendMessageAsync(
 			long chatId,
 			string text,
-			string parseMode = default,
+			ParseMode parseMode = default,
 			bool disableWebPagePreview = default,
 			bool disableNotification = default,
 			long replyToMessageId = default,
