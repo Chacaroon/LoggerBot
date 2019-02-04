@@ -34,12 +34,12 @@ namespace TelegramLoggingService
 				configureClient.BaseAddress = new Uri(String.Format("https://api.telegram.org/bot{0}/", Configuration["TelegramBotSettings:BotToken"]));
 			});
 
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 			});
-
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,7 +61,10 @@ namespace TelegramLoggingService
 				Configuration.GetSection("TelegramBotSettings").GetSection("AllowedUpdates").Get<string[]>());
 
 			app.UseSwagger();
-			app.UseSwaggerUI();
+			app.UseSwaggerUI(c =>
+			{
+				c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+			});
 
 			app.UseMvc();
 		}
