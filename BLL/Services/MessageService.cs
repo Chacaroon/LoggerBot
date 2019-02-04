@@ -1,4 +1,4 @@
-﻿using SharedKernel.BLL.Interfaces.CommandHandlers;
+﻿using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Services;
 using SharedKernel.Extensions;
 using System;
@@ -30,8 +30,8 @@ namespace BLL.Services
 
 		private void ProcessAsCommand(Message message)
 		{
-			var command = _commands.GetCommandHandler(message.GetCommand())
-				?? _commands.GetCommandHandler("undefined");
+			var command = _commands.GetCommand(message.GetCommand())
+				?? _commands.GetCommand("undefined");
 
 			command.Invoke(message);
 		}

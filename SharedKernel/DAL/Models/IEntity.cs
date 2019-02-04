@@ -4,9 +4,9 @@ using System.Text;
 
 namespace SharedKernel.DAL.Models
 {
-	public class Entity
+	public interface IEntity
 	{
-		public Guid Id { get; set; }
-		public DateTime CreatedAt { get; set; }
+		Guid Id { get; set; }
+		DateTime CreatedAt { get; set; }
 	}
 }

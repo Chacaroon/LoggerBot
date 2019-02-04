@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SharedKernel.DAL.Interfaces
 {
-	public interface IRepository<T> where T : Entity
+	public interface IRepository<T> where T : IEntity
 	{
 		void Add(T item);
 		T FindById(Guid item);

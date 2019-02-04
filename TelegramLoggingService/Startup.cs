@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DAL;
+using DAL.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SharedKernel.DAL.Interfaces;
 using Swashbuckle.AspNetCore.Swagger;
 using TelegramBotApi;
 using TelegramLoggingService.IoC;
@@ -30,6 +32,9 @@ namespace TelegramLoggingService
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddDbContext<ApplicationContext>(options =>
+				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
 			services.AddRepositories();
 
 			services.AddServices(Configuration);
@@ -37,11 +42,6 @@ namespace TelegramLoggingService
 			services.AddCommands();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-			services.AddDbContext<ApplicationContext>(options =>
-			{
-				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-			});
 
 			services.AddSwaggerGen(c =>
 			{
@@ -68,10 +68,6 @@ namespace TelegramLoggingService
 				Configuration.GetSection("TelegramBotSettings").GetSection("AllowedUpdates").Get<string[]>());
 
 			app.UseSwagger();
-			app.UseSwaggerUI(c =>
-			{
-				c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-			});
 
 			app.UseMvc();
 		}

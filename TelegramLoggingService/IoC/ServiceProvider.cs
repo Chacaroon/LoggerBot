@@ -1,5 +1,5 @@
 ﻿using BLL;
-using BLL.CommandHandlers;
+using BLL.Commands;
 using BLL.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

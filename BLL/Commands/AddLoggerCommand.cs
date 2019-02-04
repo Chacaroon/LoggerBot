@@ -1,10 +1,10 @@
-﻿using SharedKernel.BLL.Interfaces.CommandHandlers;
+﻿using SharedKernel.BLL.Interfaces.Commands;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using TelegramBotApi.Types;
 
-namespace BLL.CommandHandlers
+namespace BLL.Commands
 {
 	public class AddLoggerCommand : ICommand
 	{

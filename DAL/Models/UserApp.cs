@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SharedKernel.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SharedKernel.DAL.Models
+namespace DAL.Models
 {
 	public class UserApp
 	{

@@ -21,7 +21,7 @@ namespace DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("SharedKernel.DAL.Models.App", b =>
+            modelBuilder.Entity("DAL.Models.App", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -35,7 +35,7 @@ namespace DAL.Migrations
                     b.ToTable("Apps");
                 });
 
-            modelBuilder.Entity("SharedKernel.DAL.Models.ExceptionInfo", b =>
+            modelBuilder.Entity("DAL.Models.ExceptionInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -55,7 +55,7 @@ namespace DAL.Migrations
                     b.ToTable("Exceptions");
                 });
 
-            modelBuilder.Entity("SharedKernel.DAL.Models.User", b =>
+            modelBuilder.Entity("DAL.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -69,7 +69,7 @@ namespace DAL.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SharedKernel.DAL.Models.UserApp", b =>
+            modelBuilder.Entity("DAL.Models.UserApp", b =>
                 {
                     b.Property<Guid>("UserId");
 
@@ -82,21 +82,21 @@ namespace DAL.Migrations
                     b.ToTable("UserApp");
                 });
 
-            modelBuilder.Entity("SharedKernel.DAL.Models.ExceptionInfo", b =>
+            modelBuilder.Entity("DAL.Models.ExceptionInfo", b =>
                 {
-                    b.HasOne("SharedKernel.DAL.Models.App")
+                    b.HasOne("DAL.Models.App")
                         .WithMany("Exceptions")
                         .HasForeignKey("AppId");
                 });
 
-            modelBuilder.Entity("SharedKernel.DAL.Models.UserApp", b =>
+            modelBuilder.Entity("DAL.Models.UserApp", b =>
                 {
-                    b.HasOne("SharedKernel.DAL.Models.App", "App")
+                    b.HasOne("DAL.Models.App", "App")
                         .WithMany("UserApps")
                         .HasForeignKey("AppId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SharedKernel.DAL.Models.User", "User")
+                    b.HasOne("DAL.Models.User", "User")
                         .WithMany("UserApps")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

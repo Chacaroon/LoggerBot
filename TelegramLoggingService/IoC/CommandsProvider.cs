@@ -1,6 +1,6 @@
-﻿using BLL.CommandHandlers;
+﻿using BLL.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using SharedKernel.BLL.Interfaces.CommandHandlers;
+using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Services;
 using SharedKernel.Extensions;
 using System;

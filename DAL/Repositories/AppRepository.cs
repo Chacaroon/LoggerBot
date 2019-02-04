@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SharedKernel.DAL.Interfaces;
-using SharedKernel.DAL.Models;
+using DAL.Models;
 
 namespace DAL.Repositories
 {
 	public class AppRepository : Repository<App>, IRepository<App>
 	{
-		public AppRepository(DbContext dbContext)
+		public AppRepository(ApplicationContext dbContext)
 			: base(dbContext)
 		{
 
