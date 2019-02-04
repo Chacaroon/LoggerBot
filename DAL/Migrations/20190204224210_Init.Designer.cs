@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190118161658_Init")]
+    [Migration("20190204224210_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,24 +23,61 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.App", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Name");
+
+                    b.Property<Guid>("PublicToken");
 
                     b.HasKey("Id");
 
                     b.ToTable("Apps");
                 });
 
+            modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("ChatId");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("DAL.Models.ChatState", b =>
+                {
+                    b.Property<long>("Id");
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<bool>("IsWaitingFor");
+
+                    b.Property<string>("WaitingFor");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ChatStates");
+                });
+
             modelBuilder.Entity("DAL.Models.ExceptionInfo", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<Guid?>("AppId");
+                    b.Property<long?>("AppId");
 
                     b.Property<DateTime>("CreatedAt");
 
@@ -55,31 +92,25 @@ namespace DAL.Migrations
                     b.ToTable("Exceptions");
                 });
 
-            modelBuilder.Entity("DAL.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<long>("ChatId");
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("DAL.Models.UserApp", b =>
                 {
-                    b.Property<Guid>("UserId");
+                    b.Property<long>("UserId");
 
-                    b.Property<Guid>("AppId");
+                    b.Property<long>("AppId");
 
                     b.HasKey("UserId", "AppId");
 
                     b.HasIndex("AppId");
 
                     b.ToTable("UserApp");
+                });
+
+            modelBuilder.Entity("DAL.Models.ChatState", b =>
+                {
+                    b.HasOne("DAL.Models.ApplicationUser", "User")
+                        .WithOne("ChatState")
+                        .HasForeignKey("DAL.Models.ChatState", "Id")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("DAL.Models.ExceptionInfo", b =>
@@ -96,7 +127,7 @@ namespace DAL.Migrations
                         .HasForeignKey("AppId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("DAL.Models.User", "User")
+                    b.HasOne("DAL.Models.ApplicationUser", "User")
                         .WithMany("UserApps")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

@@ -28,9 +28,9 @@ namespace DAL.Repositories
 			DbContext.SaveChanges();
 		}
 
-		public virtual T FindById(Guid item)
+		public virtual T FindById(long id)
 		{
-			return DbContext.Set<T>().FirstOrDefault(x => x.Id == item);
+			return DbContext.Set<T>().FirstOrDefault(x => x.Id == id);
 		}
 
 		public virtual IEnumerable<T> GetAll()
@@ -55,7 +55,7 @@ namespace DAL.Repositories
 			DbContext.SaveChanges();
 		}
 
-		public void DeleteById(Guid id)
+		public void DeleteById(long id)
 		{
 			T item = DbContext.Set<T>().Where(i => i.Id == id).SingleOrDefault();
 			DbContext.Set<T>().Remove(item);

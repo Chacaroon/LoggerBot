@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL.Repositories
 {
-	public class UserRepository : Repository<User>, IRepository<User>
+	public class UserRepository : Repository<ApplicationUser>, IRepository<ApplicationUser>
 	{
 		public UserRepository(ApplicationContext dbContext)
 			: base(dbContext)

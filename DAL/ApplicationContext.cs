@@ -38,10 +38,20 @@ namespace DAL
 				.HasOne(ua => ua.App)
 				.WithMany(a => a.UserApps)
 				.HasForeignKey(ua => ua.AppId);
+
+			modelBuilder.Entity<ApplicationUser>()
+				.HasIndex(u => u.ChatId)
+				.IsUnique();
+
+			modelBuilder.Entity<ApplicationUser>()
+				.HasOne(u => u.ChatState)
+				.WithOne(c => c.User)
+				.HasForeignKey<ChatState>(cs => cs.Id);
 		}
 
-		public DbSet<User> Users { get; set; }
+		public DbSet<ApplicationUser> Users { get; set; }
 		public DbSet<App> Apps { get; set; }
 		public DbSet<ExceptionInfo> Exceptions { get; set; }
+		public DbSet<ChatState> ChatStates { get; set; }
 	}
 }

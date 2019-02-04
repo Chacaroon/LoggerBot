@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
@@ -11,9 +12,11 @@ namespace DAL.Migrations
                 name: "Apps",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    PublicToken = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -24,7 +27,8 @@ namespace DAL.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     ChatId = table.Column<long>(nullable: false)
                 },
@@ -37,11 +41,12 @@ namespace DAL.Migrations
                 name: "Exceptions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     Message = table.Column<string>(nullable: true),
                     StackTrace = table.Column<string>(nullable: true),
-                    AppId = table.Column<Guid>(nullable: true)
+                    AppId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -55,11 +60,31 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatStates",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    IsWaitingFor = table.Column<bool>(nullable: false),
+                    WaitingFor = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatStates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChatStates_Users_Id",
+                        column: x => x.Id,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserApp",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(nullable: false),
-                    AppId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<long>(nullable: false),
+                    AppId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,10 +112,19 @@ namespace DAL.Migrations
                 name: "IX_UserApp_AppId",
                 table: "UserApp",
                 column: "AppId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ChatId",
+                table: "Users",
+                column: "ChatId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ChatStates");
+
             migrationBuilder.DropTable(
                 name: "Exceptions");
 

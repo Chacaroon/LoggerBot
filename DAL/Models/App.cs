@@ -8,9 +8,13 @@ namespace DAL.Models
 	public class App : Entity
 	{
 		public string Name { get; set; }
-
+		public Guid PublicToken { get; set; }
 		public IEnumerable<ExceptionInfo> Exceptions { get; set; }
-
 		public IEnumerable<UserApp> UserApps { get; set; }
+
+		public App()
+		{
+			PublicToken = Guid.NewGuid();
+		}
 	}
 }

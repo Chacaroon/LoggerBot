@@ -7,7 +7,7 @@ namespace DAL.Models
 {
 	public class Entity : IEntity
 	{
-		public Guid Id { get; set; }
+		public long Id { get; set; }
 		public DateTime CreatedAt { get; set; }
 
 		public Entity()

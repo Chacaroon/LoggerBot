@@ -8,14 +8,14 @@ namespace SharedKernel.DAL.Interfaces
 	public interface IRepository<T> where T : IEntity
 	{
 		void Add(T item);
-		T FindById(Guid item);
+		T FindById(long id);
 
 		IEnumerable<T> GetAll(Func<T, bool> predicate);
 		IEnumerable<T> GetAll();
 		void AddRange(IEnumerable<T> item);
 		void Update(T item);
 		void Delete(T item);
-		void DeleteById(Guid id);
+		void DeleteById(long id);
 		void DeleteRange(IEnumerable<T> item);
 	}
 }

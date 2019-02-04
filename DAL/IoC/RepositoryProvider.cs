@@ -15,7 +15,7 @@ namespace DAL.IoC
 		public static void AddRepositories(this IServiceCollection services)
 		{
 			services.AddTransient<IRepository<App>, AppRepository>();
-			services.AddTransient<IRepository<User>, UserRepository>();
+			services.AddTransient<IRepository<ApplicationUser>, UserRepository>();
 
 			services.AddDbContext<ApplicationContext>();
 		}

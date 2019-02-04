@@ -6,7 +6,7 @@ namespace SharedKernel.DAL.Models
 {
 	public interface IEntity
 	{
-		Guid Id { get; set; }
+		long Id { get; set; }
 		DateTime CreatedAt { get; set; }
 	}
 }
