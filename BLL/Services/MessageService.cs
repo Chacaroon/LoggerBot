@@ -1,5 +1,6 @@
 ﻿using SharedKernel.BLL.Interfaces.CommandHandlers;
 using SharedKernel.BLL.Interfaces.Services;
+using SharedKernel.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,11 +10,11 @@ namespace BLL.Services
 {
 	public class MessageService : IMessageService
 	{
-		private ICommandsContainer _commandsContainer;
+		private IEnumerable<ICommand> _commands;
 
-		public MessageService(ICommandsContainer commandsContainer)
+		public MessageService(IEnumerable<ICommand> commands)
 		{
-			_commandsContainer = commandsContainer;
+			_commands = commands;
 		}
 
 		public void HandleMessage(Message message)
@@ -27,8 +28,13 @@ namespace BLL.Services
 			ProcessAsText(message);
 		}
 
-		private void ProcessAsCommand(Message message) 
-			=> _commandsContainer.GetCommandHandler(message.GetCommand()).Invoke(message);
+		private void ProcessAsCommand(Message message)
+		{
+			var command = _commands.GetCommandHandler(message.GetCommand())
+				?? _commands.GetCommandHandler("undefined");
+
+			command.Invoke(message);
+		}
 
 		private void ProcessAsText(Message message)
 		{

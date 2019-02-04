@@ -21,8 +21,6 @@ namespace TelegramLoggingService.IoC
 
 			foreach (Type t in commandType)
 				services.AddTransient(typeof(ICommand), t);
-
-			services.AddTransient<ICommandsContainer, CommandsContainer>();
 		}
 	}
 }
