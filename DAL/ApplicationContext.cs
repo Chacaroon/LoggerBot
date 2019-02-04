@@ -3,14 +3,24 @@ using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace DAL
 {
 	public class ApplicationContext : DbContext
 	{
-		public ApplicationContext(DbContextOptions<ApplicationContext> options)
+		private IConfiguration _configuration;
+
+		public ApplicationContext(DbContextOptions<ApplicationContext> options, IConfiguration configuration)
 			: base(options)
-		{ }
+		{
+			_configuration = configuration;
+		}
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
+		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

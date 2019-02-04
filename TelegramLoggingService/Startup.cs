@@ -2,21 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DAL;
-using DAL.Models;
+using BLL.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using SharedKernel.DAL.Interfaces;
 using Swashbuckle.AspNetCore.Swagger;
 using TelegramBotApi;
-using TelegramLoggingService.IoC;
 
 namespace TelegramLoggingService
 {
@@ -32,21 +25,21 @@ namespace TelegramLoggingService
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddDbContext<ApplicationContext>(options =>
-				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-			services.AddRepositories();
-
-			services.AddServices(Configuration);
+			services.AddServices();
 
 			services.AddCommands();
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+			services.AddHttpClient<ITelegramBot, TelegramBot>(configureClient =>
+			{
+				configureClient.BaseAddress = new Uri(String.Format("https://api.telegram.org/bot{0}/", Configuration["TelegramBotSettings:BotToken"]));
+			});
 
 			services.AddSwaggerGen(c =>
 			{
 				c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 			});
+
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +61,7 @@ namespace TelegramLoggingService
 				Configuration.GetSection("TelegramBotSettings").GetSection("AllowedUpdates").Get<string[]>());
 
 			app.UseSwagger();
+			app.UseSwaggerUI();
 
 			app.UseMvc();
 		}

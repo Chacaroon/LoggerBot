@@ -1,25 +1,24 @@
-﻿using BLL.Commands;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.BLL.Interfaces.Commands;
-using SharedKernel.BLL.Interfaces.Services;
 using SharedKernel.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace TelegramLoggingService.IoC
+namespace BLL.IoC
 {
-	public static class CommandsProvider
+	public static class CommandProvider
 	{
 		public static void AddCommands(this IServiceCollection services)
 		{
-			var commandType = Assembly.Load("BLL").GetTypes()
+			var types = Assembly.GetExecutingAssembly().GetTypes();
+			var commandTypes = types
 				.Where(t => t.GetInterfaces().Contains(typeof(ICommand)))
 				.Where(t => t.Name.IsMatch(@"(?i)\w*command"));
 
-			foreach (Type t in commandType)
+			foreach (Type t in commandTypes)
 				services.AddTransient(typeof(ICommand), t);
 		}
 	}

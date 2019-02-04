@@ -1,14 +1,14 @@
 ﻿using DAL.Models;
 using DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.DAL.Interfaces;
-using SharedKernel.DAL.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace TelegramLoggingService.IoC
+namespace DAL.IoC
 {
 	public static class RepositoryProvider
 	{
@@ -16,6 +16,8 @@ namespace TelegramLoggingService.IoC
 		{
 			services.AddTransient<IRepository<App>, AppRepository>();
 			services.AddTransient<IRepository<User>, UserRepository>();
+
+			services.AddDbContext<ApplicationContext>();
 		}
 	}
 }
