@@ -6,9 +6,9 @@ using TelegramBotApi.Types.ReplyMarkup;
 
 namespace BLL.Markups
 {
-	public class StartMarkup : InlineKeyboardMarkup
+	public class MenuMarkup : InlineKeyboardMarkup
 	{
-		public StartMarkup()
+		public MenuMarkup()
 		{
 			AddRow(new[]
 			{

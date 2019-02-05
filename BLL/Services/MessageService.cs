@@ -1,4 +1,5 @@
-﻿using SharedKernel.BLL.Interfaces.Commands;
+﻿using BLL.Models;
+using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Services;
 using SharedKernel.Extensions;
 using System;
@@ -17,7 +18,7 @@ namespace BLL.Services
 			_commands = commands;
 		}
 
-		public void HandleMessage(Message message)
+		public void HandleRequest(Message message)
 		{
 			if (message.IsCommand())
 			{
@@ -33,7 +34,15 @@ namespace BLL.Services
 			var command = _commands.GetCommand(message.GetCommand())
 				?? _commands.GetCommand("undefined");
 
-			command.Invoke(message);
+			var request = new Request(
+				message.Chat.Id,
+				message.Text);
+
+			try
+			{
+				command.Invoke(request);
+			} 
+			catch { }
 		}
 
 		private void ProcessAsText(Message message)

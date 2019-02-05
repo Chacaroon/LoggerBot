@@ -13,8 +13,7 @@ namespace BLL.IoC
 	{
 		public static void AddCommands(this IServiceCollection services)
 		{
-			var types = Assembly.GetExecutingAssembly().GetTypes();
-			var commandTypes = types
+			var commandTypes = Assembly.GetExecutingAssembly().GetTypes()
 				.Where(t => t.GetInterfaces().Contains(typeof(ICommand)))
 				.Where(t => t.Name.IsMatch(@"(?i)\w*command"));
 

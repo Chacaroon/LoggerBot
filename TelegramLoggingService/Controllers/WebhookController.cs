@@ -25,7 +25,7 @@ namespace TelegramLoggingService.Controllers
 		public IActionResult Post([FromBody]Update update)
 		{
 			if (update.IsMessage())
-				_messageService.HandleMessage(update.Message);
+				_messageService.HandleRequest(update.Message);
 
 			if (update.IsCallbackQuery()) { }
 

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />
     <ProjectReference Include="..\TelegramBotApi\TelegramBotApi.csproj" />
   </ItemGroup>
 

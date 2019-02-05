@@ -1,4 +1,5 @@
-﻿using SharedKernel.BLL.Interfaces.Commands;
+﻿using BLL.Markups;
+using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Models;
 using System;
 using System.Collections.Generic;
@@ -9,18 +10,21 @@ using TelegramBotApi.Types;
 
 namespace BLL.Commands
 {
-	class UndefinedCommand : ICommand
+	class MenuCommand : ICommand
 	{
 		private ITelegramBot _telegramBot;
-
-		public UndefinedCommand(ITelegramBot telegramBot)
+		
+		public MenuCommand(ITelegramBot telegramBot)
 		{
 			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
 		{
-			var res = await _telegramBot.SendMessageAsync(request.ChatId, "Command is not defined :(");
+			var res = await _telegramBot.SendMessageAsync(
+				request.ChatId,
+				"Меню",
+				replyMarkup: new MenuMarkup());
 
 			res.EnsureSuccessStatusCode();
 		}

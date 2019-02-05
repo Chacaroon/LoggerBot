@@ -7,6 +7,6 @@ namespace SharedKernel.BLL.Interfaces.Services
 {
 	public interface IMessageService
 	{
-		void HandleMessage(Message message);
+		void HandleRequest(Message message);
 	}
 }

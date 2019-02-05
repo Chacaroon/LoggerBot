@@ -10,8 +10,10 @@ namespace TelegramBotApi.Types.Requests
 	{
 		public StringContent ToHttpContent()
 		{
-			var obj = JsonConvert.SerializeObject(this);
-			return new StringContent(obj, Encoding.UTF8, "application/json");
+			return new StringContent(
+				JsonConvert.SerializeObject(this),
+				Encoding.UTF8,
+				"application/json");
 		}
 	}
 }
