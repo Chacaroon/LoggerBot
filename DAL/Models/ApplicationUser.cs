@@ -1,6 +1,7 @@
 ﻿using SharedKernel.DAL.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DAL.Models
@@ -18,6 +19,16 @@ namespace DAL.Models
 			UserApps = new List<UserApp>();
 			ChatId = chatId;
 			ChatState = new ChatState();
+		}
+
+		public void AddApp(App app)
+		{
+			UserApps = UserApps.Append(
+				new UserApp()
+				{
+					UserId = Id,
+					App = app
+				}).ToList();
 		}
 	}
 }

@@ -9,6 +9,6 @@ namespace SharedKernel.BLL.Interfaces.Commands
 {
 	public interface ICommand
 	{
-		Task Invoke(IRequest message);
+		Task Invoke(IRequest request);
 	}
 }
