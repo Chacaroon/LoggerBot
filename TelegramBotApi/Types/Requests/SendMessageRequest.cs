@@ -39,7 +39,7 @@ namespace TelegramBotApi.Types.Requests
 			IReplyMarkup replyMarkup)
 			: this(chatId, text)
 		{
-			ParseMode = parseMode.ToString();
+			ParseMode = parseMode != Types.ParseMode.None ? parseMode.ToString() : null;
 			DisableWebPagePreview = disableWebPagePreview;
 			DisableNotification = disableNotification;
 			ReplyToMessageId = replyToMessageId;

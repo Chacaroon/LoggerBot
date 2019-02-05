@@ -63,5 +63,15 @@ namespace TelegramBotApi
 					DisableWebPagePreview = disableWebPagePreview,
 					ReplyMarkup = replyMarkup
 				});
+
+		public Task<HttpResponseMessage> AnswerCallbackQuery(
+			string callbackQueryId,
+			string text)
+
+			=> MakeRequest("answerCallbackQuery",
+				new AnswerCallbackQueryRequest(callbackQueryId)
+				{
+					Text = text
+				});
 	}
 }

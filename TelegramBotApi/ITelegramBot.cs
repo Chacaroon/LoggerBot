@@ -30,5 +30,9 @@ namespace TelegramBotApi
 			ParseMode parseMode = default,
 			bool disableWebPagePreview = default,
 			IReplyMarkup replyMarkup = default);
+
+		Task<HttpResponseMessage> AnswerCallbackQuery(
+			string callbackQueryId,
+			string text = default);
 	}
 }

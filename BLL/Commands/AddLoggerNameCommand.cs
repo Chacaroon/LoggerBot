@@ -43,6 +43,8 @@ namespace BLL.Commands
 				.AppendLine($"`{app.PublicToken}`")
 				.ToString();
 
+			// TODO: Add link to menu
+
 			var res = await _telegramBot.SendMessageAsync(request.ChatId, 
 				text, 
 				parseMode: ParseMode.Markdown);
