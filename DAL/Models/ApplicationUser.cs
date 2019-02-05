@@ -12,7 +12,6 @@ namespace DAL.Models
 		public IEnumerable<UserApp> UserApps { get; set; }
 
 		public ChatState ChatState { get; set; }
-		
 
 		public ApplicationUser(long chatId)
 		{

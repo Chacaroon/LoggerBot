@@ -40,9 +40,12 @@ namespace BLL.Services
 
 			try
 			{
-				command.Invoke(request);
+				command.Invoke(request).Wait();
 			} 
-			catch { }
+			catch
+			{
+				//TODO: Handle errors
+			}
 		}
 
 		private void ProcessAsText(Message message)

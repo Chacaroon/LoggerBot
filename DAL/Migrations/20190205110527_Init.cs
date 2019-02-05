@@ -63,8 +63,10 @@ namespace DAL.Migrations
                 name: "ChatStates",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedAt = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<long>(nullable: false),
                     IsWaitingFor = table.Column<bool>(nullable: false),
                     WaitingFor = table.Column<string>(nullable: true)
                 },
@@ -72,8 +74,8 @@ namespace DAL.Migrations
                 {
                     table.PrimaryKey("PK_ChatStates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ChatStates_Users_Id",
-                        column: x => x.Id,
+                        name: "FK_ChatStates_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -102,6 +104,12 @@ namespace DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatStates_UserId",
+                table: "ChatStates",
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Exceptions_AppId",

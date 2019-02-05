@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20190204224210_Init")]
+    [Migration("20190205110527_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,15 +58,22 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.ChatState", b =>
                 {
-                    b.Property<long>("Id");
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<bool>("IsWaitingFor");
 
+                    b.Property<long>("UserId");
+
                     b.Property<string>("WaitingFor");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("ChatStates");
                 });
@@ -109,7 +116,7 @@ namespace DAL.Migrations
                 {
                     b.HasOne("DAL.Models.ApplicationUser", "User")
                         .WithOne("ChatState")
-                        .HasForeignKey("DAL.Models.ChatState", "Id")
+                        .HasForeignKey("DAL.Models.ChatState", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

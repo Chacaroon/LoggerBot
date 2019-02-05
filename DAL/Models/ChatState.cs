@@ -8,7 +8,6 @@ namespace DAL.Models
 {
 	public class ChatState : Entity
 	{
-		public ApplicationUser User { get; set; }
 		public bool IsWaitingFor
 		{
 			get => _isWaitingFor;

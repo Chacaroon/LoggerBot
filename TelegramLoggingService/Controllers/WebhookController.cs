@@ -14,10 +14,14 @@ namespace TelegramLoggingService.Controllers
 	public class WebhookController : Controller
 	{
 		private IMessageService _messageService;
+		private ICallbackQueryService _callbackQueryService;
 
-		public WebhookController(IMessageService messageService)
+		public WebhookController(
+			IMessageService messageService,
+			ICallbackQueryService callbackQueryService)
 		{
 			_messageService = messageService;
+			_callbackQueryService = callbackQueryService;
 		}
 
 		// POST: api/<controller>
@@ -27,7 +31,8 @@ namespace TelegramLoggingService.Controllers
 			if (update.IsMessage())
 				_messageService.HandleRequest(update.Message);
 
-			if (update.IsCallbackQuery()) { }
+			if (update.IsCallbackQuery())
+				_callbackQueryService.HandleRequest(update.CallbackQuery);
 
 			return Ok();
 		}
