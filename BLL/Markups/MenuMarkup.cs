@@ -10,11 +10,9 @@ namespace BLL.Markups
 	{
 		public MenuMarkup()
 		{
-			AddRow(new[]
-			{
+			AddRow(
 				new InlineKeyboardButton("My loggers", callbackData: "loggers"),
-				new InlineKeyboardButton("AddLogger", callbackData: "addLogger")
-			});
+				new InlineKeyboardButton("AddLogger", callbackData: "addLogger"));
 		}
 	}
 }

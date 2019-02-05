@@ -7,9 +7,10 @@ using TelegramBotApi.Types.Abstraction;
 
 namespace TelegramBotApi.Types.Requests
 {
-	class SendMessageRequest : BaseRequest
+	class EditMessageRequest : BaseRequest
 	{
 		public long ChatId { get; set; }
+		public long MessageId { get; set; }
 
 		public string Text { get; set; }
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -17,32 +18,26 @@ namespace TelegramBotApi.Types.Requests
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public bool DisableWebPagePreview { get; set; }
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-		public bool DisableNotification { get; set; }
-		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-		public long ReplyToMessageId { get; set; }
-		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public IReplyMarkup ReplyMarkup { get; set; }
 
-		public SendMessageRequest(long chatId, string text)
+		public EditMessageRequest(long chatId, long messageId, string text)
 		{
 			ChatId = chatId;
+			MessageId = messageId;
 			Text = text;
 		}
 
-		public SendMessageRequest(
+		public EditMessageRequest(
 			long chatId,
+			long messageId,
 			string text,
 			ParseMode parseMode,
 			bool disableWebPagePreview,
-			bool disableNotification,
-			long replyToMessageId,
 			IReplyMarkup replyMarkup)
-			: this(chatId, text)
+			: this(chatId, messageId, text)
 		{
 			ParseMode = parseMode.ToString();
 			DisableWebPagePreview = disableWebPagePreview;
-			DisableNotification = disableNotification;
-			ReplyToMessageId = replyToMessageId;
 			ReplyMarkup = replyMarkup;
 		}
 	}

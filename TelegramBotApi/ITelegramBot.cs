@@ -22,5 +22,13 @@ namespace TelegramBotApi
 			bool disableNotification = default,
 			long replyToMessageId = default,
 			IReplyMarkup replyMarkup = default);
+
+		Task<HttpResponseMessage> EditMessageAsync(
+			long chatId,
+			long messageId,
+			string text,
+			ParseMode parseMode = default,
+			bool disableWebPagePreview = default,
+			IReplyMarkup replyMarkup = default);
 	}
 }

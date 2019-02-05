@@ -47,5 +47,21 @@ namespace TelegramBotApi
 					ReplyToMessageId = replyToMessageId,
 					ReplyMarkup = replyMarkup
 				});
+
+		public Task<HttpResponseMessage> EditMessageAsync(
+			long chatId,
+			long messageId,
+			string text,
+			ParseMode parseMode,
+			bool disableWebPagePreview,
+			IReplyMarkup replyMarkup)
+
+			=> MakeRequest("editMessageText",
+				new EditMessageRequest(chatId, messageId, text)
+				{
+					ParseMode = parseMode.ToString(),
+					DisableWebPagePreview = disableWebPagePreview,
+					ReplyMarkup = replyMarkup
+				});
 	}
 }

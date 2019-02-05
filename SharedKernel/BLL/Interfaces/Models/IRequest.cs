@@ -7,6 +7,7 @@ namespace SharedKernel.BLL.Interfaces.Models
 	public interface IRequest
 	{
 		long ChatId { get; set; }
+		long MessageId { get; set; }
 
 		string Text { get; set; }
 	}

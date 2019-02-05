@@ -6,7 +6,6 @@ using System.Text;
 
 namespace TelegramBotApi.Types.Requests
 {
-	[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
 	class SetWebhookReqest : BaseRequest
 	{
 		public string Url { get; set; }

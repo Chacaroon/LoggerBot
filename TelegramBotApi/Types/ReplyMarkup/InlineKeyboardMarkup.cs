@@ -18,7 +18,7 @@ namespace TelegramBotApi.Types.ReplyMarkup
 			InlineKeyboard = new List<IEnumerable<InlineKeyboardButton>>();
 		}
 
-		public InlineKeyboardMarkup AddRow(IEnumerable<InlineKeyboardButton> buttons)
+		public InlineKeyboardMarkup AddRow(params InlineKeyboardButton[] buttons)
 		{
 			InlineKeyboard.Add(buttons);
 			return this;
