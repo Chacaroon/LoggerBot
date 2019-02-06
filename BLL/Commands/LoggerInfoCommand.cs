@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using BLL.MessageTemplates;
+using DAL.Models;
 using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Models;
 using SharedKernel.DAL.Interfaces;
@@ -31,16 +32,10 @@ namespace BLL.Commands
 
 			var app = _appRepository.FindById(id);
 
-			var text = new StringBuilder()
-				.AppendLine($"*Имя*: {app.Name}")
-				.AppendLine($"*Ошибок*: {app.Exceptions?.Count() ?? 0}")
-				.ToString();
-
 			var res = await _telegramBot.EditMessageAsync(
 				request.ChatId,
 				request.MessageId,
-				text,
-				parseMode: ParseMode.Markdown);
+				new LoggerInfoMessageTemplate(app.Name, app.Exceptions?.Count() ?? 0));
 
 			res.EnsureSuccessStatusCode();
 		}

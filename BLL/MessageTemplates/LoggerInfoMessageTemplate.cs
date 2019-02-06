@@ -7,21 +7,24 @@ using TelegramBotApi.Types.ReplyMarkup;
 
 namespace BLL.MessageTemplates
 {
-	class MenuMessageTemplate : IMessageTemplate
+	class LoggerInfoMessageTemplate : IMessageTemplate
 	{
 		public string Text { get; set; }
 		public ParseMode ParseMode { get; set; }
 		public IReplyMarkup ReplyMarkup { get; set; }
 
-		public MenuMessageTemplate()
+		public LoggerInfoMessageTemplate(string name, int exceptionsCount)
 		{
-			Text = "Меню";
+			Text = new StringBuilder()
+				.AppendLine($"*Имя:* {name}")
+				.AppendLine($"*Ошибок:* {exceptionsCount}")
+				.ToString();
+
+			ParseMode = ParseMode.Markdown;
 
 			ReplyMarkup = new InlineKeyboardMarkup()
 				.AddRow(
-					new InlineKeyboardButton("My loggers", callbackData: "loggers"),
-					new InlineKeyboardButton("AddLogger", callbackData: "addLogger")
-				);
+					new InlineKeyboardButton("В меню", callbackData: "menu"));
 		}
 	}
 }

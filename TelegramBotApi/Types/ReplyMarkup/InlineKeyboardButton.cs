@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using TelegramBotApi.Types.Abstraction;
 
 namespace TelegramBotApi.Types.ReplyMarkup
 {
 	[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-	public class InlineKeyboardButton
+	public class InlineKeyboardButton : IKeyboardButton
 	{
 		public string Text { get; set; }
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]

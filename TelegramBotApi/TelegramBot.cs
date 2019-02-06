@@ -48,6 +48,23 @@ namespace TelegramBotApi
 					ReplyMarkup = replyMarkup
 				});
 
+		public Task<HttpResponseMessage> SendMessageAsync(
+			long chatId,
+			IMessageTemplate messageTemplate,
+			bool disableWebPagePreview,
+			bool disableNotification,
+			long replyToMessageId)
+
+			=> MakeRequest("sendMessage",
+				new SendMessageRequest(chatId, messageTemplate.Text)
+				{
+					ParseMode = messageTemplate.ParseMode.ToString(),
+					DisableWebPagePreview = disableWebPagePreview,
+					DisableNotification = disableNotification,
+					ReplyToMessageId = replyToMessageId,
+					ReplyMarkup = messageTemplate.ReplyMarkup
+				});
+
 		public Task<HttpResponseMessage> EditMessageAsync(
 			long chatId,
 			long messageId,
@@ -62,6 +79,20 @@ namespace TelegramBotApi
 					ParseMode = parseMode.ToString(),
 					DisableWebPagePreview = disableWebPagePreview,
 					ReplyMarkup = replyMarkup
+				});
+
+		public Task<HttpResponseMessage> EditMessageAsync(
+			long chatId,
+			long messageId,
+			IMessageTemplate messageTemplate,
+			bool disableWebPagePreview)
+
+			=> MakeRequest("editMessageText",
+				new EditMessageRequest(chatId, messageId, messageTemplate.Text)
+				{
+					ParseMode = messageTemplate.ParseMode.ToString(),
+					DisableWebPagePreview = disableWebPagePreview,
+					ReplyMarkup = messageTemplate.ReplyMarkup
 				});
 
 		public Task<HttpResponseMessage> AnswerCallbackQuery(

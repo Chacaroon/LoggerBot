@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using BLL.MessageTemplates;
+using DAL.Models;
 using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Models;
 using SharedKernel.DAL.Interfaces;
@@ -37,17 +38,11 @@ namespace BLL.Commands
 
 			_userRepository.Update(user);
 
-			var text = new StringBuilder()
-				.AppendLine("Логгер успешно добавлен.")
-				.AppendLine("Вот твой токен")
-				.AppendLine($"`{app.PublicToken}`")
-				.ToString();
-
 			// TODO: Add link to menu
 
-			var res = await _telegramBot.SendMessageAsync(request.ChatId, 
-				text, 
-				parseMode: ParseMode.Markdown);
+			var res = await _telegramBot.SendMessageAsync(
+				request.ChatId, 
+				new AddLoggerSuccessMessageTemplate(app.PublicToken));
 
 			res.EnsureSuccessStatusCode();
 		}

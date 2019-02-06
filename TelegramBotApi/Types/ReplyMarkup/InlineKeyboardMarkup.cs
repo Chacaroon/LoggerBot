@@ -11,14 +11,14 @@ namespace TelegramBotApi.Types.ReplyMarkup
 	[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
 	public class InlineKeyboardMarkup : IReplyMarkup
 	{
-		public List<IEnumerable<InlineKeyboardButton>> InlineKeyboard { get; set; }
+		public List<IEnumerable<IKeyboardButton>> InlineKeyboard { get; set; }
 
 		public InlineKeyboardMarkup()
 		{
-			InlineKeyboard = new List<IEnumerable<InlineKeyboardButton>>();
+			InlineKeyboard = new List<IEnumerable<IKeyboardButton>>();
 		}
 
-		public InlineKeyboardMarkup AddRow(params InlineKeyboardButton[] buttons)
+		public IReplyMarkup AddRow(params IKeyboardButton[] buttons)
 		{
 			InlineKeyboard.Add(buttons);
 			return this;

@@ -13,7 +13,14 @@ namespace TelegramBotApi.Types.Requests
 
 		public string Text { get; set; }
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-		public string ParseMode { get; set; }
+		public string ParseMode
+		{
+			get => _parseMode?.ToString();
+			set => 
+				_parseMode = value == Types.ParseMode.None.ToString() 
+				? null 
+				: value;
+		}
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public bool DisableWebPagePreview { get; set; }
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
@@ -23,27 +30,12 @@ namespace TelegramBotApi.Types.Requests
 		[JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
 		public IReplyMarkup ReplyMarkup { get; set; }
 
+		private string _parseMode;
+
 		public SendMessageRequest(long chatId, string text)
 		{
 			ChatId = chatId;
 			Text = text;
-		}
-
-		public SendMessageRequest(
-			long chatId,
-			string text,
-			ParseMode parseMode,
-			bool disableWebPagePreview,
-			bool disableNotification,
-			long replyToMessageId,
-			IReplyMarkup replyMarkup)
-			: this(chatId, text)
-		{
-			ParseMode = parseMode != Types.ParseMode.None ? parseMode.ToString() : null;
-			DisableWebPagePreview = disableWebPagePreview;
-			DisableNotification = disableNotification;
-			ReplyToMessageId = replyToMessageId;
-			ReplyMarkup = replyMarkup;
 		}
 	}
 }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TelegramBotApi.Types;
-using TelegramBotApi.Types.Abstraction;
 
-namespace SharedKernel.BLL.Interfaces.MessageTemplates
+namespace TelegramBotApi.Types.Abstraction
 {
 	public interface IMessageTemplate
 	{

@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using BLL.MessageTemplates;
+using DAL.Models;
 using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Models;
 using SharedKernel.DAL.Interfaces;
@@ -35,17 +36,15 @@ namespace BLL.Commands
 
 			foreach (var app in apps)
 			{
-				appsMarkup.AddRow(new InlineKeyboardButton(app.Name, callbackData: $"loggerInfo:id={app.Id}"));
+				appsMarkup.AddRow(
+					new InlineKeyboardButton(
+						app.Name,
+						callbackData: $"loggerInfo:id={app.Id}"));
 			}
-
-			appsMarkup.AddRow(new InlineKeyboardButton("<< Назад", callbackData: "menu"));
 
 			var res = await _telegramBot.EditMessageAsync(request.ChatId,
 				request.MessageId,
-				"Это все твои логгеры",
-				replyMarkup: appsMarkup);
-
-			var response = res.Content.ReadAsStringAsync();
+				new LoggersMessageTemplate(appsMarkup));
 
 			res.EnsureSuccessStatusCode();
 		}

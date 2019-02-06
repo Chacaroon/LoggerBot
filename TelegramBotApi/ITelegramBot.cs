@@ -23,6 +23,13 @@ namespace TelegramBotApi
 			long replyToMessageId = default,
 			IReplyMarkup replyMarkup = default);
 
+		Task<HttpResponseMessage> SendMessageAsync(
+			long chatId,
+			IMessageTemplate messageTemplate,
+			bool disableWebPagePreview = default,
+			bool disableNotification = default,
+			long replyToMessageId = default);
+
 		Task<HttpResponseMessage> EditMessageAsync(
 			long chatId,
 			long messageId,
@@ -30,6 +37,13 @@ namespace TelegramBotApi
 			ParseMode parseMode = default,
 			bool disableWebPagePreview = default,
 			IReplyMarkup replyMarkup = default);
+
+		Task<HttpResponseMessage> EditMessageAsync(
+			long chatId,
+			long messageId,
+			IMessageTemplate messageTemplate,
+			bool disableWebPagePreview = default);
+
 
 		Task<HttpResponseMessage> AnswerCallbackQuery(
 			string callbackQueryId,

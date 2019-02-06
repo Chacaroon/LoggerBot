@@ -1,4 +1,5 @@
-﻿using DAL.Models;
+﻿using BLL.MessageTemplates;
+using DAL.Models;
 using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Models;
 using SharedKernel.DAL.Interfaces;
@@ -26,7 +27,9 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			var res = await _telegramBot.SendMessageAsync(request.ChatId, "Как назвать новый логгер?");
+			var res = await _telegramBot.SendMessageAsync(
+				request.ChatId,
+				new AddLoggerNameMessageTemplate());
 
 			res.EnsureSuccessStatusCode();
 

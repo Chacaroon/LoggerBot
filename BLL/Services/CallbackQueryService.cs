@@ -32,8 +32,7 @@ namespace BLL.Services
 				callbackQuery.Message.Id,
 				callbackQuery.GetQueryParams());
 
-			var command = _commands.GetCommand(request.Text)
-				?? _commands.GetCommand("undefined");
+			var command = _commands.GetCommandOrDefault(request.Text);
 
 			try
 			{

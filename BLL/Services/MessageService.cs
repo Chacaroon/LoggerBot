@@ -38,8 +38,7 @@ namespace BLL.Services
 
 		private void ProcessAsCommand(Message message)
 		{
-			var command = _commands.GetCommand(message.GetCommand())
-				?? _commands.GetCommand("undefined");
+			var command = _commands.GetCommandOrDefault(message.GetCommand());
 
 			var request = new Request(
 				message.Chat.Id,
@@ -58,12 +57,8 @@ namespace BLL.Services
 		private void ProcessAsText(Message message)
 		{
 			var user = _userRepository.GetAll(u => u.ChatId == message.Chat.Id).First();
-			ICommand command;
 
-			if (!user.ChatState.IsWaitingFor)
-				command = _commands.GetCommand("undefined");
-			else
-				command = _commands.GetCommand(user.ChatState.WaitingFor);
+			var command = _commands.GetCommandOrDefault(user.ChatState.WaitingFor);
 
 			var request = new Request(
 				message.Chat.Id,

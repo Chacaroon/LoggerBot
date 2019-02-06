@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using DAL.Models;
 using SharedKernel.Extensions;
 using SharedKernel.BLL.Interfaces.Models;
+using BLL.MessageTemplates;
 
 namespace BLL.Commands
 {
@@ -27,14 +28,9 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			var text = new StringBuilder()
-				.Append("Приветствие")
-				.AppendLine("\n")
-				.AppendLine("Чтобы начать работать со мной, напиши /menu")
-				.ToString();
-
-			var res = await _telegramBot.SendMessageAsync(request.ChatId,
-				text);
+			var res = await _telegramBot.SendMessageAsync(
+				request.ChatId,
+				new StartMessageTemplate());
 
 			res.EnsureSuccessStatusCode();
 

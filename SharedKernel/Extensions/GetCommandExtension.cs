@@ -8,11 +8,18 @@ namespace SharedKernel.Extensions
 {
 	public static class GetCommandExtension
 	{
-		public static ICommand GetCommand(this IEnumerable<ICommand> commands, string command)
+		public static ICommand GetCommandOrDefault(this IEnumerable<ICommand> commands, string commandName)
 		{
-			return commands
-				.Where(c => c.GetType().Name.IsMatch($"(?i){command}command"))
+			var command = commands
+				.Where(c => c.GetType().Name.IsMatch($"^(?i){commandName}command$"))
 				.FirstOrDefault();
+
+			if (command == null)
+				return commands
+				.Where(c => c.GetType().Name == "UndefinedCommand")
+				.FirstOrDefault();
+
+			return command;
 		}
 	}
 }
