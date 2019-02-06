@@ -10,5 +10,7 @@ namespace SharedKernel.BLL.Interfaces.Models
 		long MessageId { get; set; }
 
 		string Text { get; set; }
+
+		Dictionary<string, string> Params { get; set; }
 	}
 }

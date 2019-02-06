@@ -12,11 +12,17 @@ namespace BLL.Models
 
 		public string Text { get; set; }
 
-		public Request(long chatId, string text, long messageId = default)
+		public Dictionary<string, string> Params { get; set; }
+
+		public Request(long chatId,
+			string text,
+			long messageId = default,
+			Dictionary<string, string> @params = default)
 		{
 			ChatId = chatId;
 			MessageId = messageId;
 			Text = text;
+			Params = @params;
 		}
 	}
 }

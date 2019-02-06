@@ -28,8 +28,9 @@ namespace BLL.Services
 		{
 			var request = new Request(
 				callbackQuery.Message.Chat.Id,
-				callbackQuery.Data,
-				callbackQuery.Message.Id);
+				callbackQuery.GetCommand(),
+				callbackQuery.Message.Id,
+				callbackQuery.GetQueryParams());
 
 			var command = _commands.GetCommand(request.Text)
 				?? _commands.GetCommand("undefined");
