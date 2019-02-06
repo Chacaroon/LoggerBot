@@ -48,7 +48,7 @@ namespace BLL.Services
 			try
 			{
 				command.Invoke(request).Wait();
-			} 
+			}
 			catch
 			{
 				//TODO: Handle errors
@@ -61,7 +61,7 @@ namespace BLL.Services
 			ICommand command;
 
 			if (!user.ChatState.IsWaitingFor)
-				command = _commands.GetCommand("undefinde");
+				command = _commands.GetCommand("undefined");
 			else
 				command = _commands.GetCommand(user.ChatState.WaitingFor);
 
@@ -76,6 +76,11 @@ namespace BLL.Services
 			catch
 			{
 				// TODO: Handle exceptions
+			}
+			finally
+			{
+				user.ChatState.IsWaitingFor = false;
+				_userRepository.Update(user);
 			}
 		}
 	}
