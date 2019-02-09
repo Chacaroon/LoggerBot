@@ -70,7 +70,7 @@ namespace BLL.Services
 			}
 			catch
 			{
-				// TODO: Handle exceptions
+				// TODO: Handle errors
 			}
 			finally
 			{

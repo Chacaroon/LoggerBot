@@ -33,13 +33,13 @@ namespace DAL.Repositories
 			return DbContext.Set<T>().FirstOrDefault(x => x.Id == id);
 		}
 
-		public virtual IEnumerable<T> GetAll()
+		public virtual IQueryable<T> GetAll()
 		{
 			return DbContext.Set<T>();
 		}
-		public virtual IEnumerable<T> GetAll(Func<T, bool> predicate)
+		public virtual IQueryable<T> GetAll(Func<T, bool> predicate)
 		{
-			return DbContext.Set<T>().Where(predicate);
+			return DbContext.Set<T>().Where(predicate).AsQueryable();
 		}
 
 		public virtual void AddRange(IEnumerable<T> item)

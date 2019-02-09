@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text;
 
 namespace DAL.Models
@@ -21,6 +22,11 @@ namespace DAL.Models
 			: this()
 		{
 			Name = name;
+		}
+
+		public void AddException(ExceptionInfo exception)
+		{
+			Exceptions = Exceptions.Append(exception);
 		}
 	}
 }

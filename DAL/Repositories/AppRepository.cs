@@ -20,14 +20,14 @@ namespace DAL.Repositories
 				.Include(a => a.Exceptions);
 		}
 
-		public override IEnumerable<App> GetAll()
+		public override IQueryable<App> GetAll()
 		{
 			return _baseQuery;
 		}
 
-		public override IEnumerable<App> GetAll(Func<App, bool> predicate)
+		public override IQueryable<App> GetAll(Func<App, bool> predicate)
 		{
-			return _baseQuery.Where(predicate);
+			return _baseQuery.Where(predicate).AsQueryable();
 		}
 
 		public override App FindById(long id)

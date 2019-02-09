@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BLL.MessageTemplates;
 using DAL.Models;
-using SharedKernel.BLL.Interfaces.Models;
 using SharedKernel.BLL.Interfaces.Services;
 using SharedKernel.DAL.Interfaces;
 using SharedKernel.DAL.Models;
@@ -29,8 +28,6 @@ namespace BLL.Services
 
 		public void HandleException(Guid id, IExceptionInfo exceptionInfo)
 		{
-			// TODO: Refactor this service
-
 			var app = _appRepository.GetAll(a => a.PublicToken == id).FirstOrDefault();
 
 			if (app.IsNullOrEmpty())
@@ -39,20 +36,23 @@ namespace BLL.Services
 				return;
 			}
 
-			app.Exceptions = app.Exceptions.Append(Mapper.Map<ExceptionInfo>(exceptionInfo)).ToList();
+			app.AddException(Mapper.Map<ExceptionInfo>(exceptionInfo));
 
 			_appRepository.Update(app);
 
+			SendResponse(app.Name, app.UserApps, app.Exceptions.Last());
+		}
+
+		private void SendResponse(string appName, IEnumerable<UserApp> userApps, ExceptionInfo exceptionInfo)
+		{
 			var message = new ExceptionInfoMessageTemplate(
-				app.Name,
+				appName,
 				exceptionInfo.Message,
 				exceptionInfo.StackTrace);
 
-			foreach (var userApp in app.UserApps)
+			foreach (var userApp in userApps)
 			{
-				var chatId = userApp.User.ChatId;
-
-				_telegramBot.SendMessageAsync(chatId, message).Wait();
+				_telegramBot.SendMessageAsync(userApp.User.ChatId, message).Wait();
 			}
 		}
 	}

@@ -28,8 +28,6 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			// TODO: Refactor AddLoggerCommand
-
 			var user = _userRepository.GetAll(u => u.ChatId == request.ChatId).First();
 
 			var app = new App(request.Text);
@@ -38,11 +36,14 @@ namespace BLL.Commands
 
 			_userRepository.Update(user);
 
-			// TODO: Add link to menu
+			await SendResponse(request.ChatId, app.PublicToken);
+		}
 
+		private async Task SendResponse(long chatId, Guid token)
+		{
 			var res = await _telegramBot.SendMessageAsync(
-				request.ChatId, 
-				new AddLoggerSuccessMessageTemplate(app.PublicToken));
+				chatId,
+				new AddLoggerSuccessMessageTemplate(token));
 
 			res.EnsureSuccessStatusCode();
 		}

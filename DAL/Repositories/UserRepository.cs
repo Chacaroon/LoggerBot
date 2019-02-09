@@ -21,14 +21,14 @@ namespace DAL.Repositories
 				.Include(u => u.ChatState);
 		}
 
-		public override IEnumerable<ApplicationUser> GetAll()
+		public override IQueryable<ApplicationUser> GetAll()
 		{
 			return _baseQuery;
 		}
 
-		public override IEnumerable<ApplicationUser> GetAll(Func<ApplicationUser, bool> predicate)
+		public override IQueryable<ApplicationUser> GetAll(Func<ApplicationUser, bool> predicate)
 		{
-			return _baseQuery.Where(predicate);
+			return _baseQuery.Where(predicate).AsQueryable();
 		}
 
 		public override ApplicationUser FindById(long id)
