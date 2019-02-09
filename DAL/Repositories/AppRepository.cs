@@ -16,7 +16,8 @@ namespace DAL.Repositories
 		{
 			_baseQuery = dbContext.Set<App>()
 				.Include(a => a.UserApps)
-					.ThenInclude(ua => ua.User);
+					.ThenInclude(ua => ua.User)
+				.Include(a => a.Exceptions);
 		}
 
 		public override IEnumerable<App> GetAll()

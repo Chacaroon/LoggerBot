@@ -1,4 +1,6 @@
-﻿using BLL.Services;
+﻿using AutoMapper;
+using AutoMapper.Configuration;
+using BLL.Services;
 using DAL.IoC;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,7 @@ namespace BLL.IoC
 		{
 			services.AddTransient<IMessageService, MessageService>();
 			services.AddTransient<ICallbackQueryService, CallbackQueryService>();
+			services.AddTransient<IExceptionService, ExceptionService>();
 
 			services.AddRepositories();
 		}

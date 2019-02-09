@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using BLL.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using TelegramBotApi;
+using TelegramLoggingService.AutoMapper;
 
 namespace TelegramLoggingService
 {
@@ -21,6 +23,9 @@ namespace TelegramLoggingService
 		}
 
 		public IConfiguration Configuration { get; }
+
+		private global::AutoMapper.Configuration.MapperConfigurationExpression _cfg =
+			new global::AutoMapper.Configuration.MapperConfigurationExpression();
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
@@ -55,6 +60,9 @@ namespace TelegramLoggingService
 				app.UseHsts();
 				app.UseHttpsRedirection();
 			}
+
+			Bootstrapper.Bootstrap(_cfg);
+			Mapper.Initialize(_cfg);
 
 			telegramBot.SetWebhook(
 				Configuration["TelegramBotSettings:WebhookUri"],

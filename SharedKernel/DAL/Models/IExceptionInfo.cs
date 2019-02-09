@@ -8,5 +8,6 @@ namespace SharedKernel.DAL.Models
 	{
 		string Message { get; set; }
 		string StackTrace { get; set; }
+		IExceptionInfo InnerException { get; set; }
 	}
 }
