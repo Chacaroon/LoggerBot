@@ -14,7 +14,7 @@ namespace BLL.Commands
 	class MenuCommand : ICommand
 	{
 		private ITelegramBot _telegramBot;
-		
+
 		public MenuCommand(ITelegramBot telegramBot)
 		{
 			_telegramBot = telegramBot;
@@ -22,28 +22,26 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			var res = await SendOrUpdateMessage(
+			HttpResponseMessage res = default;
+
+			if (request is ICommandRequest)
+			{
+				res = await _telegramBot.SendMessageAsync(
+					request.ChatId,
+					new MenuMessageTemplate());
+			}
+
+			if (request is IQueryRequest)
+			{
+				var temp = request as IQueryRequest;
+
+				res = await _telegramBot.EditMessageAsync(
 				request.ChatId,
-				new MenuMessageTemplate(),
-				request.MessageId);
-
+				temp.MessageId,
+				new MenuMessageTemplate());
+			}
+			
 			res.EnsureSuccessStatusCode();
-		}
-
-		private Task<HttpResponseMessage> SendOrUpdateMessage(
-			long chatId,
-			IMessageTemplate messageTemplate,
-			long messageId = default)
-		{
-			if (messageId == default)
-				return _telegramBot.SendMessageAsync(
-					chatId,
-					messageTemplate);
-
-			return _telegramBot.EditMessageAsync(
-				chatId,
-				messageId,
-				messageTemplate);
 		}
 	}
 }

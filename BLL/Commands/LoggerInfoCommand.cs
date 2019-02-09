@@ -28,13 +28,15 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			var id = long.Parse(request.Params["id"]);
+			var queryRequest = request as IQueryRequest;
+
+			var id = long.Parse(queryRequest.QueryParams["id"]);
 
 			var app = _appRepository.FindById(id);
 
 			var res = await _telegramBot.EditMessageAsync(
-				request.ChatId,
-				request.MessageId,
+				queryRequest.ChatId,
+				queryRequest.MessageId,
 				new LoggerInfoMessageTemplate(app.Name, app.Exceptions?.Count() ?? 0));
 
 			res.EnsureSuccessStatusCode();

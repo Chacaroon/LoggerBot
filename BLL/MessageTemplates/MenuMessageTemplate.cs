@@ -19,8 +19,8 @@ namespace BLL.MessageTemplates
 
 			ReplyMarkup = new InlineKeyboardMarkup()
 				.AddRow(
-					new InlineKeyboardButton("My loggers", callbackData: "loggers"),
-					new InlineKeyboardButton("AddLogger", callbackData: "addLogger")
+					new InlineKeyboardButton("Мои логгеры", callbackData: "loggers"),
+					new InlineKeyboardButton("Добавить логгер", callbackData: "addLogger")
 				);
 		}
 	}

@@ -4,10 +4,7 @@ using System.Text;
 
 namespace SharedKernel.BLL.Interfaces.Models
 {
-	public interface IRequest
+	public interface ICommandRequest : IRequest
 	{
-		long ChatId { get; set; }
-
-		string Text { get; set; }
 	}
 }

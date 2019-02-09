@@ -28,6 +28,8 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
+			var queryRequest = request as IQueryRequest;
+
 			var apps = _userRepository
 				.GetAll(u => u.ChatId == request.ChatId)
 				.SelectMany(u => u.UserApps.Select(ua => ua.App));
@@ -42,8 +44,9 @@ namespace BLL.Commands
 						callbackData: $"loggerInfo:id={app.Id}"));
 			}
 
-			var res = await _telegramBot.EditMessageAsync(request.ChatId,
-				request.MessageId,
+			var res = await _telegramBot.EditMessageAsync(
+				request.ChatId,
+				queryRequest.MessageId,
 				new LoggersMessageTemplate(appsMarkup));
 
 			res.EnsureSuccessStatusCode();

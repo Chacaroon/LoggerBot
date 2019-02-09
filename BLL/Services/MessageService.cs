@@ -40,7 +40,7 @@ namespace BLL.Services
 		{
 			var command = _commands.GetCommandOrDefault(message.GetCommand());
 
-			var request = new Request(
+			var request = new CommandRequest(
 				message.Chat.Id,
 				message.Text);
 
