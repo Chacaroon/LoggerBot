@@ -50,19 +50,25 @@ namespace BLL.Services
 			}
 			catch
 			{
-				//TODO: Handle errors
+				_commands.GetErrorCommand().Invoke(request).Wait();
 			}
 		}
 
 		private void ProcessAsText(Message message)
 		{
-			var user = _userRepository.GetAll(u => u.ChatId == message.Chat.Id).First();
-
-			var command = _commands.GetCommandOrDefault(user.ChatState.WaitingFor);
+			var user = _userRepository.GetAll(u => u.ChatId == message.Chat.Id).FirstOrDefault();
 
 			var request = new Request(
 				message.Chat.Id,
 				message.Text);
+
+			if (user.IsNullOrEmpty())
+			{
+				_commands.GetErrorCommand().Invoke(request).Wait();
+				return;
+			}
+
+			var command = _commands.GetCommandOrDefault(user.ChatState.WaitingFor);
 
 			try
 			{
@@ -70,7 +76,7 @@ namespace BLL.Services
 			}
 			catch
 			{
-				// TODO: Handle errors
+				_commands.GetErrorCommand().Invoke(request).Wait();
 			}
 			finally
 			{

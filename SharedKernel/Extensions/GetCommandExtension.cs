@@ -21,5 +21,12 @@ namespace SharedKernel.Extensions
 
 			return command;
 		}
+
+		public static ICommand GetErrorCommand(this IEnumerable<ICommand> commands)
+		{
+			return commands
+				.Where(c => c.GetType().Name.IsMatch($"ErrorCommand"))
+				.First();
+		}
 	}
 }

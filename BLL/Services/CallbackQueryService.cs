@@ -40,7 +40,7 @@ namespace BLL.Services
 			}
 			catch
 			{
-				// TODO: Handle errors
+				_commands.GetErrorCommand().Invoke(request).Wait();
 			}
 			finally
 			{
