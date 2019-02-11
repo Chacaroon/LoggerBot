@@ -11,7 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedKernel", "SharedKernel\SharedKernel.csproj", "{F9FD4384-B259-40E5-9D23-3ED6EDB7CDB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramBotApi", "TelegramBotApi\TelegramBotApi.csproj", "{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBotApi", "TelegramBotApi\TelegramBotApi.csproj", "{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{ABDC1081-FEBE-4473-B81A-89B7DF3F324D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramLogger", "TelegramLogger\TelegramLogger.csproj", "{79114C82-D46B-4B48-9F83-B95A1B3CCC77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExceptionsService", "ExceptionsService\ExceptionsService.csproj", "{19EF7FE8-8849-4F0D-8627-158527981E51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +45,21 @@ Global
 		{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19EF7FE8-8849-4F0D-8627-158527981E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19EF7FE8-8849-4F0D-8627-158527981E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19EF7FE8-8849-4F0D-8627-158527981E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19EF7FE8-8849-4F0D-8627-158527981E51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77} = {ABDC1081-FEBE-4473-B81A-89B7DF3F324D}
+		{19EF7FE8-8849-4F0D-8627-158527981E51} = {ABDC1081-FEBE-4473-B81A-89B7DF3F324D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53583960-A2E3-4EEE-843B-4D745F56C236}
