@@ -26,7 +26,7 @@ namespace DAL.Models
 
 		public void AddException(ExceptionInfo exception)
 		{
-			Exceptions = Exceptions.Append(exception);
+			Exceptions = Exceptions.Append(exception).ToList();
 		}
 	}
 }
