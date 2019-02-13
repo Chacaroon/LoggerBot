@@ -5,39 +5,39 @@ using SharedKernel.BLL.Interfaces.Models;
 using SharedKernel.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TelegramBotApi;
-using TelegramBotApi.Types;
 
 namespace BLL.Commands
 {
-	class LoggerInfoCommand : ICommand
+	class ShowPrivateTokenCommand : ICommand
 	{
 		private IRepository<App> _appRepository;
 		private ITelegramBot _telegramBot;
 
-		public LoggerInfoCommand(
+		public ShowPrivateTokenCommand(
 			IRepository<App> appRepository,
 			ITelegramBot telegramBot)
 		{
 			_appRepository = appRepository;
 			_telegramBot = telegramBot;
 		}
-
+		
 		public async Task Invoke(IRequest request)
 		{
-			var queryRequest = request as IQueryRequest;
+			if (!(request is IQueryRequest))
+				throw new InvalidCastException($"{nameof(request)} is not {nameof(IQueryRequest)}");
 
-			var id = long.Parse(queryRequest.QueryParams["id"]);
+			string appId = ((IQueryRequest)request).QueryParams.GetValueOrDefault("id");
 
-			var app = _appRepository.FindById(id);
+			long id = long.Parse(appId);
 
-			var res = await _telegramBot.EditMessageAsync(
-				queryRequest.ChatId,
-				queryRequest.MessageId,
-				new LoggerInfoMessageTemplate(app.Name, app.Exceptions?.Count() ?? 0, app.Id));
+			var token = _appRepository.FindById(id).PrivateToken;
+
+			var res = await _telegramBot.SendMessageAsync(
+				request.ChatId,
+				new ShowPrivateTokenMessageTemplate(token));
 
 			res.EnsureSuccessStatusCode();
 		}

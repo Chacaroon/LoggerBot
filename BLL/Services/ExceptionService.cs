@@ -28,7 +28,7 @@ namespace BLL.Services
 
 		public void HandleException(Guid id, IExceptionInfo exceptionInfo)
 		{
-			var app = _appRepository.GetAll(a => a.PublicToken == id).FirstOrDefault();
+			var app = _appRepository.GetAll(a => a.PrivateToken == id).FirstOrDefault();
 
 			if (app.IsNullOrEmpty())
 			{

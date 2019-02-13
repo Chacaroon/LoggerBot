@@ -21,13 +21,14 @@ namespace DAL.Models
 			ChatState = new ChatState();
 		}
 
-		public void AddApp(App app)
+		public void AddApp(App app, bool isSubscriber = default)
 		{
 			UserApps = UserApps.Append(
 				new UserApp()
 				{
 					UserId = Id,
-					App = app
+					App = app,
+					IsSubscriber = isSubscriber
 				}).ToList();
 		}
 	}

@@ -36,7 +36,7 @@ namespace BLL.Commands
 
 			_userRepository.Update(user);
 
-			await SendResponse(request.ChatId, app.PublicToken);
+			await SendResponse(request.ChatId, app.PrivateToken);
 		}
 
 		private async Task SendResponse(long chatId, Guid token)

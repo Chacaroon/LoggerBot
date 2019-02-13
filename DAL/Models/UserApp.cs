@@ -12,5 +12,7 @@ namespace DAL.Models
 
 		public long AppId { get; set; }
 		public App App { get; set; }
+
+		public bool IsSubscriber { get; set; }
 	}
 }

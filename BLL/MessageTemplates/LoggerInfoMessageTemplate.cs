@@ -13,16 +13,20 @@ namespace BLL.MessageTemplates
 		public ParseMode ParseMode { get; set; }
 		public IReplyMarkup ReplyMarkup { get; set; }
 
-		public LoggerInfoMessageTemplate(string name, int exceptionsCount)
+		public LoggerInfoMessageTemplate(string name, int exceptionsCount, long appId)
 		{
 			Text = new StringBuilder()
 				.AppendLine($"*Имя:* {name}")
 				.AppendLine($"*Ошибок:* {exceptionsCount}")
+				.AppendLine()
 				.ToString();
 
 			ParseMode = ParseMode.Markdown;
 
 			ReplyMarkup = new InlineKeyboardMarkup()
+				.AddRow(
+				new InlineKeyboardButton("Private Token", callbackData: $"showPrivateToken:id={appId}"),
+				new InlineKeyboardButton("Subscribe Token", callbackData: $"showSubscribeToken:id={appId}"))
 				.AddRow(
 					new InlineKeyboardButton("В меню", callbackData: "menu"));
 		}

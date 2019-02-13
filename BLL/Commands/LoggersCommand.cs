@@ -32,7 +32,9 @@ namespace BLL.Commands
 
 			var apps = _userRepository
 				.GetAll(u => u.ChatId == request.ChatId)
-				.SelectMany(u => u.UserApps.Select(ua => ua.App));
+				.SelectMany(u => u.UserApps)
+				.Where(ua => !ua.IsSubscriber)
+				.Select(ua => ua.App);
 
 			var appsMarkup = new InlineKeyboardMarkup();
 

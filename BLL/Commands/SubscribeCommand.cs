@@ -9,35 +9,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TelegramBotApi;
-using TelegramBotApi.Types;
 
 namespace BLL.Commands
 {
-	class LoggerInfoCommand : ICommand
+	class SubscribeCommand : ICommand
 	{
-		private IRepository<App> _appRepository;
+		private IRepository<ApplicationUser> _userRepository;
 		private ITelegramBot _telegramBot;
 
-		public LoggerInfoCommand(
-			IRepository<App> appRepository,
+		public SubscribeCommand(
+			IRepository<ApplicationUser> userRepository,
 			ITelegramBot telegramBot)
 		{
-			_appRepository = appRepository;
+			_userRepository = userRepository;
 			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
 		{
-			var queryRequest = request as IQueryRequest;
+			var user = _userRepository
+				.GetAll(u => u.ChatId == request.ChatId)
+				.First();
 
-			var id = long.Parse(queryRequest.QueryParams["id"]);
+			user.ChatState.WaitingFor = "onSubscribeToken";
 
-			var app = _appRepository.FindById(id);
+			_userRepository.Update(user);
 
-			var res = await _telegramBot.EditMessageAsync(
-				queryRequest.ChatId,
-				queryRequest.MessageId,
-				new LoggerInfoMessageTemplate(app.Name, app.Exceptions?.Count() ?? 0, app.Id));
+			var res = await _telegramBot.SendMessageAsync(
+				request.ChatId,
+				new SendSubscribeTokenMessageTemplate());
 
 			res.EnsureSuccessStatusCode();
 		}
