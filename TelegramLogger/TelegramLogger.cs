@@ -18,7 +18,7 @@ namespace TelegramLogger
 			_logLevel = logLevel;
 			_httpClient = new HttpClient();
 
-			_httpClient.BaseAddress = new Uri("https://telegramloggingservice.azurewebsites.net/api/exception/");
+			_httpClient.BaseAddress = new Uri("https://7cb0824a.ngrok.io/api/exception/");
 		}
 
 		public IDisposable BeginScope<TState>(TState state)
