@@ -23,6 +23,7 @@ namespace BLL.MessageTemplates
 					new InlineKeyboardButton("Добавить логгер", callbackData: "addLogger")
 				)
 				.AddRow(
+					new InlineKeyboardButton("Подписки", callbackData: "subscribes"),
 					new InlineKeyboardButton("Подписаться", callbackData: "subscribe")
 				);
 		}
