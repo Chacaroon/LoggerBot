@@ -1,9 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28527.54
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramLoggingService", "TelegramLoggingService\TelegramLoggingService.csproj", "{6A413B74-3123-49EB-8C8F-28CC22A32645}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramLoggingService", "TelegramLoggingService\TelegramLoggingService.csproj", "{6A413B74-3123-49EB-8C8F-28CC22A32645}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{6D11218D-616A-4A2D-86CE-D21692FBD41B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{6FEC2F9F-7F95-4C2E-B1C5-FF2313594E2B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedKernel", "SharedKernel\SharedKernel.csproj", "{F9FD4384-B259-40E5-9D23-3ED6EDB7CDB8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBotApi", "TelegramBotApi\TelegramBotApi.csproj", "{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{ABDC1081-FEBE-4473-B81A-89B7DF3F324D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramLogger", "TelegramLogger\TelegramLogger.csproj", "{79114C82-D46B-4B48-9F83-B95A1B3CCC77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExceptionsService", "ExceptionsService\ExceptionsService.csproj", "{19EF7FE8-8849-4F0D-8627-158527981E51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +29,37 @@ Global
 		{6A413B74-3123-49EB-8C8F-28CC22A32645}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A413B74-3123-49EB-8C8F-28CC22A32645}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A413B74-3123-49EB-8C8F-28CC22A32645}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D11218D-616A-4A2D-86CE-D21692FBD41B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D11218D-616A-4A2D-86CE-D21692FBD41B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D11218D-616A-4A2D-86CE-D21692FBD41B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D11218D-616A-4A2D-86CE-D21692FBD41B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FEC2F9F-7F95-4C2E-B1C5-FF2313594E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FEC2F9F-7F95-4C2E-B1C5-FF2313594E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FEC2F9F-7F95-4C2E-B1C5-FF2313594E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FEC2F9F-7F95-4C2E-B1C5-FF2313594E2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9FD4384-B259-40E5-9D23-3ED6EDB7CDB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9FD4384-B259-40E5-9D23-3ED6EDB7CDB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9FD4384-B259-40E5-9D23-3ED6EDB7CDB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9FD4384-B259-40E5-9D23-3ED6EDB7CDB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A388F3E5-4B3F-44E9-8B15-F83EBBA2B5C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19EF7FE8-8849-4F0D-8627-158527981E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19EF7FE8-8849-4F0D-8627-158527981E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19EF7FE8-8849-4F0D-8627-158527981E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19EF7FE8-8849-4F0D-8627-158527981E51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{79114C82-D46B-4B48-9F83-B95A1B3CCC77} = {ABDC1081-FEBE-4473-B81A-89B7DF3F324D}
+		{19EF7FE8-8849-4F0D-8627-158527981E51} = {ABDC1081-FEBE-4473-B81A-89B7DF3F324D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {53583960-A2E3-4EEE-843B-4D745F56C236}
