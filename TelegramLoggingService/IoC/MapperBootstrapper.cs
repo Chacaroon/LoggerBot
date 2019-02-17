@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TelegramLoggingService.AutoMapper
+namespace TelegramLoggingService.IoC
 {
-	public class Bootstrapper
+	public class MapperBootstrapper
 	{
 		public static void Bootstrap(MapperConfigurationExpression cfg)
 		{
 			cfg.AddProfile(new ModelToEntityMappingProfile());
 
-			BLL.AutoMapper.Bootstrapper.Bootstrap(cfg);
+			BLL.IoC.MapperBootstrapper.Bootstrap(cfg);
 		}
 	}
 }

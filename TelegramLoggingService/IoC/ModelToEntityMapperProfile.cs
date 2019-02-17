@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TelegramLoggingService.ViewModels;
 
-namespace TelegramLoggingService.AutoMapper
+namespace TelegramLoggingService.IoC
 {
 	public class ModelToEntityMappingProfile : Profile
 	{
@@ -15,7 +15,8 @@ namespace TelegramLoggingService.AutoMapper
 		{
 			CreateMap<ExceptionViewModel, IExceptionInfo>()
 				.ForMember(evm => evm.Id, opt => opt.Ignore())
-				.ForMember(evm => evm.CreatedAt, opt => opt.Ignore());
+				.ForMember(evm => evm.CreatedAt, opt => opt.Ignore())
+				.MaxDepth(1);
 		}
 	}
 }

@@ -9,16 +9,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TelegramBotApi;
-using TelegramBotApi.Types;
 
 namespace BLL.Commands
 {
-	class AddLoggerNameCommand : ICommand
+	class SubscribeCommand : ICommand
 	{
 		private IRepository<ApplicationUser> _userRepository;
 		private ITelegramBot _telegramBot;
 
-		public AddLoggerNameCommand(
+		public SubscribeCommand(
 			IRepository<ApplicationUser> userRepository,
 			ITelegramBot telegramBot)
 		{
@@ -28,22 +27,17 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			var user = _userRepository.GetAll(u => u.ChatId == request.ChatId).First();
+			var user = _userRepository
+				.GetAll(u => u.ChatId == request.ChatId)
+				.First();
 
-			var logger = new Logger(request.Text);
-
-			user.AddLogger(logger);
+			user.ChatState.WaitingFor = "onSubscribeToken";
 
 			_userRepository.Update(user);
 
-			await SendResponse(request.ChatId, logger.PrivateToken);
-		}
-
-		private async Task SendResponse(long chatId, Guid token)
-		{
 			var res = await _telegramBot.SendMessageAsync(
-				chatId,
-				new AddLoggerSuccessMessageTemplate(token));
+				request.ChatId,
+				new SendSubscribeTokenMessageTemplate());
 
 			res.EnsureSuccessStatusCode();
 		}

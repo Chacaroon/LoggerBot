@@ -13,27 +13,29 @@ using TelegramBotApi.Types.ReplyMarkup;
 
 namespace BLL.Commands
 {
-	class LoggersCommand : ICommand
+	class SubscribesCommand : ICommand
 	{
-		private ITelegramBot _telegramBot;
 		private IRepository<ApplicationUser> _userRepository;
+		private ITelegramBot _telegramBot;
 
-		public LoggersCommand(
-			ITelegramBot telegramBot,
-			IRepository<ApplicationUser> userRepository)
+		public SubscribesCommand(
+			IRepository<ApplicationUser> userRepository,
+			ITelegramBot telegramBot)
 		{
-			_telegramBot = telegramBot;
 			_userRepository = userRepository;
+			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
 		{
-			var queryRequest = request as IQueryRequest;
+			if (!(request is IQueryRequest))
+				throw new InvalidCastException(nameof(request));
 
 			var loggers = _userRepository
 				.GetAll(u => u.ChatId == request.ChatId)
-				.SelectMany(u => u.UserLoggers)
-				.Where(ua => !ua.IsSubscriber)
+				.First()
+				.UserLoggers
+				.Where(ua => ua.IsSubscriber)
 				.Select(ua => ua.Logger);
 
 			var loggersMarkup = new InlineKeyboardMarkup();
@@ -43,13 +45,15 @@ namespace BLL.Commands
 				loggersMarkup.AddRow(
 					new InlineKeyboardButton(
 						logger.Name,
-						callbackData: $"loggerInfo:id={logger.Id}"));
+						callbackData: $"subscribeInfo:id={logger.Id}"));
 			}
+
+			var queryRequest = (IQueryRequest)request;
 
 			var res = await _telegramBot.EditMessageAsync(
 				request.ChatId,
 				queryRequest.MessageId,
-				new LoggersMessageTemplate(loggersMarkup));
+				new SubscribesMessageTemplate(loggersMarkup));
 
 			res.EnsureSuccessStatusCode();
 		}

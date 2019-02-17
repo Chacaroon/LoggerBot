@@ -6,12 +6,18 @@ using AutoMapper;
 using BLL.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SimpleInjector;
+using SimpleInjector.Integration.AspNetCore.Mvc;
+using SimpleInjector.Lifestyles;
 using Swashbuckle.AspNetCore.Swagger;
 using TelegramBotApi;
-using TelegramLoggingService.AutoMapper;
+using TelegramLoggingService.IoC;
 
 namespace TelegramLoggingService
 {
@@ -23,20 +29,18 @@ namespace TelegramLoggingService
 		}
 
 		public IConfiguration Configuration { get; }
+		private Container container = new Container();
 
-		private global::AutoMapper.Configuration.MapperConfigurationExpression _cfg =
-			new global::AutoMapper.Configuration.MapperConfigurationExpression();
+		private AutoMapper.Configuration.MapperConfigurationExpression _cfg =
+			new AutoMapper.Configuration.MapperConfigurationExpression();
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddServices();
-
-			services.AddCommands();
-
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 			services.AddHttpClient<ITelegramBot, TelegramBot>(configureClient =>
 			{
-				configureClient.BaseAddress = new Uri(String.Format("https://api.telegram.org/bot{0}/", Configuration["TelegramBotSettings:BotToken"]));
+				configureClient.BaseAddress = new Uri(Configuration["TelegramBotSettings:ApiUri"]);
 			});
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -45,6 +49,21 @@ namespace TelegramLoggingService
 			{
 				c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 			});
+
+			IntegrateSimpleInjector(services);
+		}
+
+		private void IntegrateSimpleInjector(IServiceCollection services)
+		{
+			container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
+
+			services.AddSingleton<IControllerActivator>(
+				new SimpleInjectorControllerActivator(container));
+			services.AddSingleton<IViewComponentActivator>(
+				new SimpleInjectorViewComponentActivator(container));
+
+			services.EnableSimpleInjectorCrossWiring(container);
+			services.UseSimpleInjectorAspNetRequestScoping(container);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,8 +80,9 @@ namespace TelegramLoggingService
 				app.UseHttpsRedirection();
 			}
 
-			Bootstrapper.Bootstrap(_cfg);
+			IoC.MapperBootstrapper.Bootstrap(_cfg);
 			Mapper.Initialize(_cfg);
+			InitializeContainer(app);
 
 			telegramBot.SetWebhook(
 				Configuration["TelegramBotSettings:WebhookUri"],
@@ -75,6 +95,19 @@ namespace TelegramLoggingService
 			});
 
 			app.UseMvc();
+		}
+
+		private void InitializeContainer(IApplicationBuilder app)
+		{
+			// Add application presentation components:
+			container.RegisterMvcControllers(app);
+			container.RegisterMvcViewComponents(app);
+
+			// Add custom services:
+			Bootstrapper.Bootstrap(container);
+
+			// Allow Simple Injector to resolve services from ASP.NET Core.
+			container.AutoCrossWireAspNetComponents(app);
 		}
 	}
 }

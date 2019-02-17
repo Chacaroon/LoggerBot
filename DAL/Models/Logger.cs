@@ -6,19 +6,23 @@ using System.Text;
 
 namespace DAL.Models
 {
-	public class App : Entity
+	public class Logger : Entity
 	{
-		public string Name { get; set; }
-		public Guid PublicToken { get; set; }
-		public IEnumerable<ExceptionInfo> Exceptions { get; set; }
-		public IEnumerable<UserApp> UserApps { get; set; }
+		public readonly bool IsnullOrEmpty;
 
-		public App()
+		public string Name { get; set; }
+		public Guid PrivateToken { get; set; }
+		public Guid SubscribeToken { get; set; }
+		public IEnumerable<ExceptionInfo> Exceptions { get; set; }
+		public IEnumerable<UserLogger> UserLoggers { get; set; }
+
+		public Logger()
 		{
-			PublicToken = Guid.NewGuid();
+			PrivateToken = Guid.NewGuid();
+			SubscribeToken = Guid.NewGuid();
 		}
 
-		public App(string name)
+		public Logger(string name)
 			: this()
 		{
 			Name = name;

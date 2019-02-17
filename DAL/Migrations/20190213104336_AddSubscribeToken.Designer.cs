@@ -4,20 +4,41 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20190213104336_AddSubscribeToken")]
+    partial class AddSubscribeToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("DAL.Models.App", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Name");
+
+                    b.Property<Guid>("PublicToken");
+
+                    b.Property<Guid>("SubscribeToken");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Apps");
+                });
 
             modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
                 {
@@ -61,9 +82,9 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<long?>("AppId");
 
-                    b.Property<long?>("LoggerId");
+                    b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Message");
 
@@ -71,43 +92,24 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LoggerId");
+                    b.HasIndex("AppId");
 
                     b.ToTable("Exceptions");
                 });
 
-            modelBuilder.Entity("DAL.Models.Logger", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<string>("Name");
-
-                    b.Property<Guid>("PrivateToken");
-
-                    b.Property<Guid>("SubscribeToken");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Loggers");
-                });
-
-            modelBuilder.Entity("DAL.Models.UserLogger", b =>
+            modelBuilder.Entity("DAL.Models.UserApp", b =>
                 {
                     b.Property<long>("UserId");
 
-                    b.Property<long>("LoggerId");
+                    b.Property<long>("AppId");
 
                     b.Property<bool>("IsSubscriber");
 
-                    b.HasKey("UserId", "LoggerId");
+                    b.HasKey("UserId", "AppId");
 
-                    b.HasIndex("LoggerId");
+                    b.HasIndex("AppId");
 
-                    b.ToTable("UserLogger");
+                    b.ToTable("UserApp");
                 });
 
             modelBuilder.Entity("DAL.Models.ApplicationUser", b =>
@@ -119,20 +121,20 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.ExceptionInfo", b =>
                 {
-                    b.HasOne("DAL.Models.Logger")
+                    b.HasOne("DAL.Models.App")
                         .WithMany("Exceptions")
-                        .HasForeignKey("LoggerId");
+                        .HasForeignKey("AppId");
                 });
 
-            modelBuilder.Entity("DAL.Models.UserLogger", b =>
+            modelBuilder.Entity("DAL.Models.UserApp", b =>
                 {
-                    b.HasOne("DAL.Models.Logger", "Logger")
-                        .WithMany("UserLoggers")
-                        .HasForeignKey("LoggerId")
+                    b.HasOne("DAL.Models.App", "App")
+                        .WithMany("UserApps")
+                        .HasForeignKey("AppId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DAL.Models.ApplicationUser", "User")
-                        .WithMany("UserLoggers")
+                        .WithMany("UserApps")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

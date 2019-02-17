@@ -15,44 +15,43 @@ namespace BLL.Services
 {
 	public class ExceptionService : IExceptionService
 	{
-		private IRepository<App> _appRepository;
+		private IRepository<Logger> _loggerRepository;
 		private ITelegramBot _telegramBot;
 
 		public ExceptionService(
-			IRepository<App> appRepository,
+			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
 		{
-			_appRepository = appRepository;
+			_loggerRepository = loggerRepository;
 			_telegramBot = telegramBot;
 		}
 
 		public void HandleException(Guid id, IExceptionInfo exceptionInfo)
 		{
-			var app = _appRepository.GetAll(a => a.PublicToken == id).FirstOrDefault();
+			var logger = _loggerRepository.GetAll(a => a.PrivateToken == id).FirstOrDefault();
 
-			if (app.IsNullOrEmpty())
+			if (logger.IsNullOrEmpty())
 			{
-				// TODO: Handle incorrect app id exception
-				return;
+				throw new KeyNotFoundException();
 			}
 
-			app.AddException(Mapper.Map<ExceptionInfo>(exceptionInfo));
+			logger.AddException(Mapper.Map<ExceptionInfo>(exceptionInfo));
 
-			_appRepository.Update(app);
+			_loggerRepository.Update(logger);
 
-			SendResponse(app.Name, app.UserApps, app.Exceptions.Last());
+			SendResponse(logger.Name, logger.UserLoggers, logger.Exceptions.Last());
 		}
 
-		private void SendResponse(string appName, IEnumerable<UserApp> userApps, ExceptionInfo exceptionInfo)
+		private void SendResponse(string appName, IEnumerable<UserLogger> userLoggers, ExceptionInfo exceptionInfo)
 		{
 			var message = new ExceptionInfoMessageTemplate(
 				appName,
 				exceptionInfo.Message,
 				exceptionInfo.StackTrace);
 
-			foreach (var userApp in userApps)
+			foreach (var userLogger in userLoggers)
 			{
-				_telegramBot.SendMessageAsync(userApp.User.ChatId, message).Wait();
+				_telegramBot.SendMessageAsync(userLogger.User.ChatId, message).Wait();
 			}
 		}
 	}

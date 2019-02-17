@@ -10,24 +10,25 @@ namespace DAL.Models
 	{
 		public long ChatId { get; set; }
 
-		public IEnumerable<UserApp> UserApps { get; set; }
+		public IEnumerable<UserLogger> UserLoggers { get; set; }
 
 		public ChatState ChatState { get; set; }
 
 		public ApplicationUser(long chatId)
 		{
-			UserApps = new List<UserApp>();
+			UserLoggers = new List<UserLogger>();
 			ChatId = chatId;
 			ChatState = new ChatState();
 		}
 
-		public void AddApp(App app)
+		public void AddLogger(Logger logger, bool isSubscriber = default)
 		{
-			UserApps = UserApps.Append(
-				new UserApp()
+			UserLoggers = UserLoggers.Append(
+				new UserLogger()
 				{
 					UserId = Id,
-					App = app
+					Logger = logger,
+					IsSubscriber = isSubscriber
 				}).ToList();
 		}
 	}

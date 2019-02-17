@@ -30,7 +30,7 @@ namespace DAL.Repositories
 
 		public virtual T FindById(long id)
 		{
-			return DbContext.Set<T>().FirstOrDefault(x => x.Id == id);
+			return DbContext.Set<T>().SingleOrDefault(x => x.Id == id);
 		}
 
 		public virtual IQueryable<T> GetAll()
