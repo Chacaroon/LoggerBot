@@ -30,13 +30,13 @@ namespace BLL.Commands
 		{
 			var user = _userRepository.GetAll(u => u.ChatId == request.ChatId).First();
 
-			var app = new App(request.Text);
+			var logger = new Logger(request.Text);
 
-			user.AddApp(app);
+			user.AddLogger(logger);
 
 			_userRepository.Update(user);
 
-			await SendResponse(request.ChatId, app.PrivateToken);
+			await SendResponse(request.ChatId, logger.PrivateToken);
 		}
 
 		private async Task SendResponse(long chatId, Guid token)

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BLL.AutoMapper
+namespace BLL.IoC
 {
 	class AbstractionToImplementationMappingProfile : Profile
 	{

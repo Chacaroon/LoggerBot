@@ -16,8 +16,8 @@ namespace DAL.Repositories
 			: base(dbContext)
 		{
 			_baseQuery = dbContext.Set<ApplicationUser>()
-				.Include(u => u.UserApps)
-					.ThenInclude(ua => ua.App)
+				.Include(u => u.UserLoggers)
+					.ThenInclude(ua => ua.Logger)
 				.Include(u => u.ChatState);
 		}
 

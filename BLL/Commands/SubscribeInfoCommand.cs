@@ -15,13 +15,13 @@ namespace BLL.Commands
 {
 	class SubscribeInfoCommand : ICommand
 	{
-		private IRepository<App> _appRepository;
+		private IRepository<Logger> _loggerRepository;
 		private ITelegramBot _telegramBot;
 
-		public SubscribeInfoCommand(IRepository<App> appRepository,
+		public SubscribeInfoCommand(IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
 		{
-			_appRepository = appRepository;
+			_loggerRepository = loggerRepository;
 			_telegramBot = telegramBot;
 		}
 
@@ -32,17 +32,17 @@ namespace BLL.Commands
 
 			var queryRequest = (IQueryRequest)request;
 
-			var appId = long.Parse(queryRequest.QueryParams.GetValueOrDefault("id"));
+			var loggerId = long.Parse(queryRequest.QueryParams.GetValueOrDefault("id"));
 
-			var app = _appRepository.FindById(appId);
+			var logger = _loggerRepository.FindById(loggerId);
 
-			if (app.IsNullOrEmpty())
-				throw new KeyNotFoundException(nameof(app));
+			if (logger.IsNullOrEmpty())
+				throw new KeyNotFoundException(nameof(logger));
 
 			var res = await _telegramBot.EditMessageAsync(
 				queryRequest.ChatId,
 				queryRequest.MessageId,
-				new SubscribeInfoMessageTemplate(app.Name, app.Exceptions?.Count() ?? 0));
+				new SubscribeInfoMessageTemplate(logger.Name, logger.Exceptions?.Count() ?? 0));
 
 			res.EnsureSuccessStatusCode();
 		}

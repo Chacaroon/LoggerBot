@@ -5,13 +5,13 @@ using System.Text;
 
 namespace DAL.Models
 {
-	public class UserApp
+	public class UserLogger
 	{
 		public long UserId { get; set; }
 		public ApplicationUser User { get; set; }
 
-		public long AppId { get; set; }
-		public App App { get; set; }
+		public long LoggerId { get; set; }
+		public Logger Logger { get; set; }
 
 		public bool IsSubscriber { get; set; }
 	}

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -16,9 +18,10 @@ namespace TelegramLogger
 		{
 			_token = token;
 			_logLevel = logLevel;
-			_httpClient = new HttpClient();
-
-			_httpClient.BaseAddress = new Uri("https://7cb0824a.ngrok.io/api/exception/");
+			_httpClient = new HttpClient
+			{
+				BaseAddress = new Uri(AppSettings.ApiUri)
+			};
 		}
 
 		public IDisposable BeginScope<TState>(TState state)

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace DAL.Models
 {
-	public class App : Entity
+	public class Logger : Entity
 	{
 		public readonly bool IsnullOrEmpty;
 
@@ -14,15 +14,15 @@ namespace DAL.Models
 		public Guid PrivateToken { get; set; }
 		public Guid SubscribeToken { get; set; }
 		public IEnumerable<ExceptionInfo> Exceptions { get; set; }
-		public IEnumerable<UserApp> UserApps { get; set; }
+		public IEnumerable<UserLogger> UserLoggers { get; set; }
 
-		public App()
+		public Logger()
 		{
 			PrivateToken = Guid.NewGuid();
 			SubscribeToken = Guid.NewGuid();
 		}
 
-		public App(string name)
+		public Logger(string name)
 			: this()
 		{
 			Name = name;

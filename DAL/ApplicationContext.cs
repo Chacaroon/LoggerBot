@@ -11,8 +11,7 @@ namespace DAL
 	{
 		private IConfiguration _configuration;
 
-		public ApplicationContext(DbContextOptions<ApplicationContext> options, IConfiguration configuration)
-			: base(options)
+		public ApplicationContext(IConfiguration configuration)
 		{
 			_configuration = configuration;
 		}
@@ -26,22 +25,22 @@ namespace DAL
 		{
 			base.OnModelCreating(modelBuilder);
 
-			modelBuilder.Entity<UserApp>()
-				.HasKey(ua => new { ua.UserId, ua.AppId });
+			modelBuilder.Entity<UserLogger>()
+				.HasKey(ul => new { ul.UserId, ul.LoggerId });
 
-			modelBuilder.Entity<UserApp>()
-				.HasOne(ua => ua.User)
-				.WithMany(u => u.UserApps)
-				.HasForeignKey(ua => ua.UserId);
+			modelBuilder.Entity<UserLogger>()
+				.HasOne(ul => ul.User)
+				.WithMany(u => u.UserLoggers)
+				.HasForeignKey(ul => ul.UserId);
 
-			modelBuilder.Entity<UserApp>()
-				.HasOne(ua => ua.App)
-				.WithMany(a => a.UserApps)
-				.HasForeignKey(ua => ua.AppId);
+			modelBuilder.Entity<UserLogger>()
+				.HasOne(ul => ul.Logger)
+				.WithMany(l => l.UserLoggers)
+				.HasForeignKey(ul => ul.LoggerId);
 		}
 
 		public DbSet<ApplicationUser> Users { get; set; }
-		public DbSet<App> Apps { get; set; }
+		public DbSet<Logger> Loggers { get; set; }
 		public DbSet<ExceptionInfo> Exceptions { get; set; }
 		public DbSet<ChatState> ChatStates { get; set; }
 	}

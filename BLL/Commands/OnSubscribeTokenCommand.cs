@@ -16,16 +16,16 @@ namespace BLL.Commands
 	class OnSubscribeTokenCommand : ICommand
 	{
 		private IRepository<ApplicationUser> _userRepository;
-		private IRepository<App> _appRepository;
+		private IRepository<Logger> _loggerRepository;
 		private ITelegramBot _telegramBot;
 
 		public OnSubscribeTokenCommand(
 			IRepository<ApplicationUser> userRepository,
-			IRepository<App> appRepository,
+			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
 		{
 			_userRepository = userRepository;
-			_appRepository = appRepository;
+			_loggerRepository = loggerRepository;
 			_telegramBot = telegramBot;
 		}
 
@@ -39,11 +39,11 @@ namespace BLL.Commands
 				return;
 			}
 
-			var app = _appRepository
+			var logger = _loggerRepository
 				.GetAll(a => a.SubscribeToken == subscribeToken)
 				.FirstOrDefault();
 
-			if (app.IsNullOrEmpty())
+			if (logger.IsNullOrEmpty())
 			{
 				await SendIncorrectTokenResponse(request.ChatId);
 				return;
@@ -53,13 +53,13 @@ namespace BLL.Commands
 				.GetAll(u => u.ChatId == request.ChatId)
 				.First();
 
-			user.AddApp(app, true);
+			user.AddLogger(logger, true);
 
 			_userRepository.Update(user);
 
 			var res = await _telegramBot.SendMessageAsync(
 				request.ChatId,
-				new SubscribeSuccessMessageTemplate(app.Name));
+				new SubscribeSuccessMessageTemplate(logger.Name));
 
 			res.EnsureSuccessStatusCode();
 		}

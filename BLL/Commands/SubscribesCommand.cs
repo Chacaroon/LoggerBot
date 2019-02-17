@@ -31,21 +31,21 @@ namespace BLL.Commands
 			if (!(request is IQueryRequest))
 				throw new InvalidCastException(nameof(request));
 
-			var apps = _userRepository
+			var loggers = _userRepository
 				.GetAll(u => u.ChatId == request.ChatId)
 				.First()
-				.UserApps
+				.UserLoggers
 				.Where(ua => ua.IsSubscriber)
-				.Select(ua => ua.App);
+				.Select(ua => ua.Logger);
 
-			var appsMarkup = new InlineKeyboardMarkup();
+			var loggersMarkup = new InlineKeyboardMarkup();
 
-			foreach (var app in apps)
+			foreach (var logger in loggers)
 			{
-				appsMarkup.AddRow(
+				loggersMarkup.AddRow(
 					new InlineKeyboardButton(
-						app.Name,
-						callbackData: $"subscribeInfo:id={app.Id}"));
+						logger.Name,
+						callbackData: $"subscribeInfo:id={logger.Id}"));
 			}
 
 			var queryRequest = (IQueryRequest)request;
@@ -53,7 +53,7 @@ namespace BLL.Commands
 			var res = await _telegramBot.EditMessageAsync(
 				request.ChatId,
 				queryRequest.MessageId,
-				new SubscribesMessageTemplate(appsMarkup));
+				new SubscribesMessageTemplate(loggersMarkup));
 
 			res.EnsureSuccessStatusCode();
 		}

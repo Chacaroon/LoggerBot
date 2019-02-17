@@ -7,30 +7,30 @@ using System;
 
 namespace DAL.Repositories
 {
-	public class AppRepository : Repository<App>, IRepository<App>
+	public class LoggerRepository : Repository<Logger>, IRepository<Logger>
 	{
-		private IQueryable<App> _baseQuery;
+		private IQueryable<Logger> _baseQuery;
 
-		public AppRepository(ApplicationContext dbContext)
+		public LoggerRepository(ApplicationContext dbContext)
 			: base(dbContext)
 		{
-			_baseQuery = dbContext.Set<App>()
-				.Include(a => a.UserApps)
+			_baseQuery = dbContext.Set<Logger>()
+				.Include(a => a.UserLoggers)
 					.ThenInclude(ua => ua.User)
 				.Include(a => a.Exceptions);
 		}
 
-		public override IQueryable<App> GetAll()
+		public override IQueryable<Logger> GetAll()
 		{
 			return _baseQuery;
 		}
 
-		public override IQueryable<App> GetAll(Func<App, bool> predicate)
+		public override IQueryable<Logger> GetAll(Func<Logger, bool> predicate)
 		{
 			return _baseQuery.Where(predicate).AsQueryable();
 		}
 
-		public override App FindById(long id)
+		public override Logger FindById(long id)
 		{
 			return _baseQuery.Where(a => a.Id == id).FirstOrDefault();
 		}

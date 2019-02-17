@@ -15,14 +15,14 @@ namespace BLL.Commands
 {
 	class LoggerInfoCommand : ICommand
 	{
-		private IRepository<App> _appRepository;
+		private IRepository<Logger> _loggerRepository;
 		private ITelegramBot _telegramBot;
 
 		public LoggerInfoCommand(
-			IRepository<App> appRepository,
+			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
 		{
-			_appRepository = appRepository;
+			_loggerRepository = loggerRepository;
 			_telegramBot = telegramBot;
 		}
 
@@ -32,12 +32,12 @@ namespace BLL.Commands
 
 			var id = long.Parse(queryRequest.QueryParams["id"]);
 
-			var app = _appRepository.FindById(id);
+			var logger = _loggerRepository.FindById(id);
 
 			var res = await _telegramBot.EditMessageAsync(
 				queryRequest.ChatId,
 				queryRequest.MessageId,
-				new LoggerInfoMessageTemplate(app.Name, app.Exceptions?.Count() ?? 0, app.Id));
+				new LoggerInfoMessageTemplate(logger.Name, logger.Exceptions?.Count() ?? 0, logger.Id));
 
 			res.EnsureSuccessStatusCode();
 		}

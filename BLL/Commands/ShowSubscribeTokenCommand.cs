@@ -13,14 +13,14 @@ namespace BLL.Commands
 {
 	class ShowSubscribeTokenCommand : ICommand
 	{
-		private IRepository<App> _appRepository;
+		private IRepository<Logger> _loggerRepository;
 		private ITelegramBot _telegramBot;
 
 		public ShowSubscribeTokenCommand(
-			IRepository<App> appRepository,
+			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
 		{
-			_appRepository = appRepository;
+			_loggerRepository = loggerRepository;
 			_telegramBot = telegramBot;
 		}
 
@@ -29,11 +29,11 @@ namespace BLL.Commands
 			if (!(request is IQueryRequest))
 				throw new InvalidCastException($"{nameof(request)}");
 
-			string appId = ((IQueryRequest)request).QueryParams.GetValueOrDefault("id");
+			string loggerId = ((IQueryRequest)request).QueryParams.GetValueOrDefault("id");
 
-			long id = long.Parse(appId);
+			long id = long.Parse(loggerId);
 
-			var token = _appRepository.FindById(id).SubscribeToken;
+			var token = _loggerRepository.FindById(id).SubscribeToken;
 
 			var res = await _telegramBot.SendMessageAsync(
 				request.ChatId,

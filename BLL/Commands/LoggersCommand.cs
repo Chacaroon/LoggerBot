@@ -30,26 +30,26 @@ namespace BLL.Commands
 		{
 			var queryRequest = request as IQueryRequest;
 
-			var apps = _userRepository
+			var loggers = _userRepository
 				.GetAll(u => u.ChatId == request.ChatId)
-				.SelectMany(u => u.UserApps)
+				.SelectMany(u => u.UserLoggers)
 				.Where(ua => !ua.IsSubscriber)
-				.Select(ua => ua.App);
+				.Select(ua => ua.Logger);
 
-			var appsMarkup = new InlineKeyboardMarkup();
+			var loggersMarkup = new InlineKeyboardMarkup();
 
-			foreach (var app in apps)
+			foreach (var logger in loggers)
 			{
-				appsMarkup.AddRow(
+				loggersMarkup.AddRow(
 					new InlineKeyboardButton(
-						app.Name,
-						callbackData: $"loggerInfo:id={app.Id}"));
+						logger.Name,
+						callbackData: $"loggerInfo:id={logger.Id}"));
 			}
 
 			var res = await _telegramBot.EditMessageAsync(
 				request.ChatId,
 				queryRequest.MessageId,
-				new LoggersMessageTemplate(appsMarkup));
+				new LoggersMessageTemplate(loggersMarkup));
 
 			res.EnsureSuccessStatusCode();
 		}

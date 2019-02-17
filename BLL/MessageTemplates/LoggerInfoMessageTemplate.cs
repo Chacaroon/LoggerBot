@@ -13,7 +13,7 @@ namespace BLL.MessageTemplates
 		public ParseMode ParseMode { get; set; }
 		public IReplyMarkup ReplyMarkup { get; set; }
 
-		public LoggerInfoMessageTemplate(string name, int exceptionsCount, long appId)
+		public LoggerInfoMessageTemplate(string name, int exceptionsCount, long loggerId)
 		{
 			Text = new StringBuilder()
 				.AppendLine($"*Имя:* {name}")
@@ -25,8 +25,8 @@ namespace BLL.MessageTemplates
 
 			ReplyMarkup = new InlineKeyboardMarkup()
 				.AddRow(
-				new InlineKeyboardButton("Private Token", callbackData: $"showPrivateToken:id={appId}"),
-				new InlineKeyboardButton("Subscribe Token", callbackData: $"showSubscribeToken:id={appId}"))
+				new InlineKeyboardButton("Private Token", callbackData: $"showPrivateToken:id={loggerId}"),
+				new InlineKeyboardButton("Subscribe Token", callbackData: $"showSubscribeToken:id={loggerId}"))
 				.AddRow(
 					new InlineKeyboardButton("В меню", callbackData: "menu"));
 		}

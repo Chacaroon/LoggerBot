@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BLL.AutoMapper
+namespace BLL.IoC
 {
-	public class Bootstrapper
+	public class MapperBootstrapper
 	{
 		public static void Bootstrap(MapperConfigurationExpression cfg)
 		{

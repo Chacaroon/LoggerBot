@@ -12,6 +12,8 @@
     <Compile Remove="Migrations\20190212170607_AddSubscribeTokenToAppModel.Designer.cs" />
     <Compile Remove="Migrations\20190212171143_AddIsSubscriberIntoUserApp.cs" />
     <Compile Remove="Migrations\20190212171143_AddIsSubscriberIntoUserApp.Designer.cs" />
+    <Compile Remove="Migrations\20190216154430_RenameAppsToLoggers.cs" />
+    <Compile Remove="Migrations\20190216154430_RenameAppsToLoggers.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +23,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="4.4.3" />
   </ItemGroup>
 
   <ItemGroup>
