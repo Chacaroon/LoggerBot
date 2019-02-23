@@ -4,6 +4,7 @@ using DAL.Models;
 using SharedKernel.BLL.Interfaces.Services;
 using SharedKernel.DAL.Interfaces;
 using SharedKernel.DAL.Models;
+using SharedKernel.Exceptons;
 using SharedKernel.Extensions;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace BLL.Services
 
 			if (logger.IsNullOrEmpty())
 			{
-				throw new KeyNotFoundException();
+				throw new InvalidTokenException(id);
 			}
 
 			logger.AddException(Mapper.Map<ExceptionInfo>(exceptionInfo));

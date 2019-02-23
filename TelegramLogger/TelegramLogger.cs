@@ -1,10 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 
 namespace TelegramLogger
 {
@@ -41,17 +37,30 @@ namespace TelegramLogger
 
 			if (!IsEnabled(logLevel)) return;
 
+			if (exception.Source == "Microsoft.Extensions.Logging") return;
+
 			var request = CreateExceptionModel(exception, formatter(state, exception));
 
-			_httpClient.PostAsync($"{_token}", request.ToHttpContent()).Wait();
+			HttpResponseMessage res = _httpClient.PostAsync($"{_token}", request.ToHttpContent()).Result;
+			var responseMessage = res.Content.ReadAsStringAsync().Result;
+
+			try
+			{
+				res.EnsureSuccessStatusCode();
+			}
+			catch (HttpRequestException)
+			{
+				throw new LoggerException(responseMessage);
+			}
 		}
 
 		private ExceptionModel CreateExceptionModel(Exception exception, string message = default)
 		{
-			var exceptionModel = new ExceptionModel();
-
-			exceptionModel.Message = message ?? exception.Message;
-			exceptionModel.StackTrace = exception.StackTrace;
+			var exceptionModel = new ExceptionModel
+			{
+				Message = message ?? exception.Message,
+				StackTrace = exception.StackTrace
+			};
 
 			if (exception.InnerException != null)
 				exceptionModel.InnerException = CreateExceptionModel(exception.InnerException);
