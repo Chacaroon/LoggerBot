@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using SharedKernel.BLL.Interfaces.Services;
 using SharedKernel.DAL.Models;
+using SharedKernel.Exceptons;
 using TelegramLoggingService.ViewModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -27,9 +28,25 @@ namespace TelegramLoggingService.Controllers
 		[HttpPost("{id}")]
 		public IActionResult Post([FromBody]ExceptionViewModel model)
 		{
-			Guid id = new Guid(HttpContext.GetRouteData().Values["id"].ToString());
+			Guid id = Guid.Empty;
 
-			_exceptionService.HandleException(id, Mapper.Map<IExceptionInfo>(model));
+			if (!Guid.TryParse(HttpContext.GetRouteData().Values["id"].ToString(), out id))
+			{
+				return BadRequest("Token format is incorrect");
+			}
+
+			try
+			{
+				_exceptionService.HandleException(id, Mapper.Map<IExceptionInfo>(model));
+			}
+			catch (InvalidTokenException e)
+			{
+				return NotFound(e.Message);
+			}
+			catch
+			{
+				return BadRequest();
+			}
 
 			return Ok();
 		}
