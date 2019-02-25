@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using BLL.IoC;
@@ -31,7 +32,6 @@ namespace TelegramLoggingService
 
 		public IConfiguration Configuration { get; }
 		private Container container = new Container();
-		private IServiceCollection _services;
 
 		private AutoMapper.Configuration.MapperConfigurationExpression _cfg =
 			new AutoMapper.Configuration.MapperConfigurationExpression();
@@ -39,17 +39,11 @@ namespace TelegramLoggingService
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			_services = services;
-
 			IntegrateSimpleInjector(services);
 
 			Bootstrapper.Bootstrap(container);
 
-			services.AddHttpContextAccessor();
-			services.AddHttpClient<ITelegramBot, TelegramBot>(configureClient =>
-			{
-				configureClient.BaseAddress = new Uri(Configuration["TelegramBotSettings:ApiUri"]);
-			});
+			AddDbContext(services);
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -57,19 +51,6 @@ namespace TelegramLoggingService
 			{
 				c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 			});
-		}
-
-		private void IntegrateSimpleInjector(IServiceCollection services)
-		{
-			container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
-
-			services.AddSingleton<IControllerActivator>(
-				new SimpleInjectorControllerActivator(container));
-			services.AddSingleton<IViewComponentActivator>(
-				new SimpleInjectorViewComponentActivator(container));
-
-			services.EnableSimpleInjectorCrossWiring(container);
-			services.UseSimpleInjectorAspNetRequestScoping(container);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,10 +70,7 @@ namespace TelegramLoggingService
 			IoC.MapperBootstrapper.Bootstrap(_cfg);
 			Mapper.Initialize(_cfg);
 			InitializeContainer(app);
-
-			container.GetInstance<Action<IServiceCollection, IConfiguration>>()
-				.Invoke(_services, Configuration);
-
+			
 			telegramBot.SetWebhook(
 				Configuration["TelegramBotSettings:WebhookUri"],
 				Configuration.GetSection("TelegramBotSettings").GetSection("AllowedUpdates").Get<string[]>());
@@ -104,6 +82,56 @@ namespace TelegramLoggingService
 			});
 
 			app.UseMvc();
+		}
+
+		private void IntegrateSimpleInjector(IServiceCollection services)
+		{
+			container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
+			container.Options.AllowOverridingRegistrations = true;
+
+			services.AddSingleton<IControllerActivator>(
+				new SimpleInjectorControllerActivator(container));
+			services.AddSingleton<IViewComponentActivator>(
+				new SimpleInjectorViewComponentActivator(container));
+
+			services.AddHttpContextAccessor();
+			services.AddHttpClient<ITelegramBot, TelegramBot>(configureClient =>
+			{
+				configureClient.BaseAddress = new Uri(Configuration["TelegramBotSettings:ApiUri"]);
+			});
+
+			services.EnableSimpleInjectorCrossWiring(container);
+			services.UseSimpleInjectorAspNetRequestScoping(container);
+		}
+
+		private void AddDbContext(IServiceCollection services)
+		{
+			var AddDbContext = typeof(EntityFrameworkServiceCollectionExtensions)
+				.GetMethod("AddDbContext", 1, 
+				new Type[] 
+				{
+					typeof(IServiceCollection),
+					typeof(Action<DbContextOptionsBuilder>),
+					typeof(ServiceLifetime),
+					typeof(ServiceLifetime)
+				});
+
+			var applicationContextType = Assembly
+				.Load("DAL")
+				.GetTypes()
+				.Where(t => t.IsSubclassOf(typeof(DbContext)))
+				.Single();
+
+			AddDbContext
+				.MakeGenericMethod(applicationContextType)
+				.Invoke(services, new object[]
+				{
+					services,
+					(Action<DbContextOptionsBuilder>)(options =>
+						options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))),
+					ServiceLifetime.Scoped,
+					ServiceLifetime.Scoped
+				});
 		}
 
 		private void InitializeContainer(IApplicationBuilder app)

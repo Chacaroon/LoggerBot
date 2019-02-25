@@ -15,10 +15,6 @@ namespace DAL.IoC
 		{
 			container.Register<IRepository<Logger>, LoggerRepository>(Lifestyle.Transient);
 			container.Register<IRepository<ApplicationUser>, UserRepository>(Lifestyle.Transient);
-
-			container.Register<Action<IServiceCollection, IConfiguration>>(() => (services, config) => 
-				services.AddDbContext<ApplicationContext>(options => 
-					options.UseSqlServer(config.GetConnectionString("DefaultConnection"))));
 		}
 	}
 }
