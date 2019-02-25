@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleInjector;
@@ -30,6 +31,7 @@ namespace TelegramLoggingService
 
 		public IConfiguration Configuration { get; }
 		private Container container = new Container();
+		private IServiceCollection _services;
 
 		private AutoMapper.Configuration.MapperConfigurationExpression _cfg =
 			new AutoMapper.Configuration.MapperConfigurationExpression();
@@ -37,7 +39,13 @@ namespace TelegramLoggingService
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+			_services = services;
+
+			IntegrateSimpleInjector(services);
+
+			Bootstrapper.Bootstrap(container);
+
+			services.AddHttpContextAccessor();
 			services.AddHttpClient<ITelegramBot, TelegramBot>(configureClient =>
 			{
 				configureClient.BaseAddress = new Uri(Configuration["TelegramBotSettings:ApiUri"]);
@@ -49,8 +57,6 @@ namespace TelegramLoggingService
 			{
 				c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
 			});
-
-			IntegrateSimpleInjector(services);
 		}
 
 		private void IntegrateSimpleInjector(IServiceCollection services)
@@ -84,6 +90,9 @@ namespace TelegramLoggingService
 			Mapper.Initialize(_cfg);
 			InitializeContainer(app);
 
+			container.GetInstance<Action<IServiceCollection, IConfiguration>>()
+				.Invoke(_services, Configuration);
+
 			telegramBot.SetWebhook(
 				Configuration["TelegramBotSettings:WebhookUri"],
 				Configuration.GetSection("TelegramBotSettings").GetSection("AllowedUpdates").Get<string[]>());
@@ -102,9 +111,6 @@ namespace TelegramLoggingService
 			// Add application presentation components:
 			container.RegisterMvcControllers(app);
 			container.RegisterMvcViewComponents(app);
-
-			// Add custom services:
-			Bootstrapper.Bootstrap(container);
 
 			// Allow Simple Injector to resolve services from ASP.NET Core.
 			container.AutoCrossWireAspNetComponents(app);

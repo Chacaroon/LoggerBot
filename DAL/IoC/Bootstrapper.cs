@@ -6,8 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.DAL.Interfaces;
 using SimpleInjector;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DAL.IoC
 {
@@ -18,7 +16,9 @@ namespace DAL.IoC
 			container.Register<IRepository<Logger>, LoggerRepository>(Lifestyle.Transient);
 			container.Register<IRepository<ApplicationUser>, UserRepository>(Lifestyle.Transient);
 
-			container.Register<ApplicationContext>(Lifestyle.Singleton);
+			container.Register<Action<IServiceCollection, IConfiguration>>(() => (services, config) => 
+				services.AddDbContext<ApplicationContext>(options => 
+					options.UseSqlServer(config.GetConnectionString("DefaultConnection"))));
 		}
 	}
 }
