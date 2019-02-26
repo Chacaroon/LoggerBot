@@ -48,7 +48,7 @@ namespace ExceptionsService
 				app.UseHsts();
 			}
 
-			loggerFactory.AddTelegram("708672ef-f64a-4ccf-952a-302430ab680f");
+			loggerFactory.AddTelegram("adbf98e9-a684-4331-9f44-0a6542035d27");
 
 			app.UseSwagger();
 			app.UseSwaggerUI(c =>
