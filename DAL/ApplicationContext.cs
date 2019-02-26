@@ -9,16 +9,10 @@ namespace DAL
 {
 	public class ApplicationContext : DbContext
 	{
-		private IConfiguration _configuration;
-
-		public ApplicationContext(IConfiguration configuration)
+		public ApplicationContext() { }
+		public ApplicationContext(DbContextOptions<ApplicationContext> options)
+			: base(options)
 		{
-			_configuration = configuration;
-		}
-
-		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		{
-			optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
