@@ -29,7 +29,7 @@ namespace BLL.MessageTemplates
 					new InlineKeyboardButton("Subscribe Token", callbackData: $"showSubscribeToken:id={loggerId}"))
 				.AddRow(
 					new InlineKeyboardButton("Изменить имя", callbackData: $"changeLoggerNameRequest:id={loggerId}"),
-					new InlineKeyboardButton("Удалить логгер", callbackData: $"deleteLoggerRequest:id={loggerId}"))
+					new InlineKeyboardButton("Удалить логгер", callbackData: $"removeLoggerRequest:id={loggerId}"))
 				.AddRow(
 					new InlineKeyboardButton("В меню", callbackData: "menu"));
 		}

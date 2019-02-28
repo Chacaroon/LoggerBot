@@ -7,18 +7,11 @@ using System.Text;
 
 namespace DAL.Models
 {
-	public class ExceptionInfo : Entity, IExceptionInfo
+	public class ExceptionInfo : Entity
 	{
+		public Logger Logger { get; set; }
 		public string Message { get; set; }
 		public string StackTrace { get; set; }
-
-		[NotMapped]
-		IExceptionInfo IExceptionInfo.InnerException
-		{
-			get => InnerException;
-			set => InnerException = value as ExceptionInfo;
-		}
-
 		public ExceptionInfo InnerException { get; set; }
 	}
 }

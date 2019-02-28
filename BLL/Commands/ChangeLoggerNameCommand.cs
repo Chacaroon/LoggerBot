@@ -4,6 +4,7 @@ using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Models;
 using SharedKernel.DAL.Interfaces;
 using System.Threading.Tasks;
+using BLL.MessageTemplates;
 using TelegramBotApi;
 
 namespace BLL.Commands
@@ -37,7 +38,7 @@ namespace BLL.Commands
 
 			var res = await _telegramBot.SendMessageAsync(
 				request.ChatId,
-				"Имя логгера успешно изменено");
+				new ChangeLoggerNameSuccessMessageTemplate());
 
 			res.EnsureSuccessStatusCode();
 		}
