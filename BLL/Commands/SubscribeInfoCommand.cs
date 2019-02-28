@@ -27,9 +27,6 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			if (!(request is IQueryRequest))
-				throw new InvalidCastException(nameof(request));
-
 			var queryRequest = (IQueryRequest)request;
 
 			var loggerId = long.Parse(queryRequest.QueryParams.GetValueOrDefault("id"));

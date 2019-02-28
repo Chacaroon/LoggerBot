@@ -28,7 +28,7 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			var queryRequest = request as IQueryRequest;
+			var queryRequest = (IQueryRequest)request;
 
 			var loggers = _userRepository
 				.GetAll(u => u.ChatId == request.ChatId)

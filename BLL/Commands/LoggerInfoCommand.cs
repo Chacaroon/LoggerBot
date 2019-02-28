@@ -28,7 +28,7 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			var queryRequest = request as IQueryRequest;
+			var queryRequest = (IQueryRequest)request;
 
 			var id = long.Parse(queryRequest.QueryParams["id"]);
 

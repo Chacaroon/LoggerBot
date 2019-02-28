@@ -31,9 +31,7 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			Guid subscribeToken;
-
-			if (!Guid.TryParse(request.Text, out subscribeToken))
+			if (!Guid.TryParse(request.Text, out Guid subscribeToken))
 			{
 				await SendIncorrectTokenResponse(request.ChatId);
 				return;

@@ -28,8 +28,7 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			if (!(request is IQueryRequest))
-				throw new InvalidCastException(nameof(request));
+			var queryRequest = (IQueryRequest)request;
 
 			var loggers = _userRepository
 				.GetAll(u => u.ChatId == request.ChatId)
@@ -47,8 +46,6 @@ namespace BLL.Commands
 						logger.Name,
 						callbackData: $"subscribeInfo:id={logger.Id}"));
 			}
-
-			var queryRequest = (IQueryRequest)request;
 
 			var res = await _telegramBot.EditMessageAsync(
 				request.ChatId,
