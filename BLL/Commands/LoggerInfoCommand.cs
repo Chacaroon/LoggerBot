@@ -30,7 +30,7 @@ namespace BLL.Commands
 		{
 			var queryRequest = (IQueryRequest)request;
 
-			var id = long.Parse(queryRequest.QueryParams["id"]);
+			var id = long.Parse(queryRequest.Query.GetQueryParam("id"));
 
 			var logger = _loggerRepository.FindById(id);
 

@@ -5,19 +5,17 @@ using System.Text;
 
 namespace BLL.Models
 {
-	class QueryRequest : Request, IQueryRequest
+	class MessageRequest : Request, IMessageRequest
 	{
-		public long MessageId { get; set; }
 		public IQuery Query { get; set; }
 
-		public QueryRequest(
-			long chatId, 
-			long messageId, 
-			string text)
+		public MessageRequest(
+			long chatId,
+			string text,
+			string query)
 			: base(chatId, text)
 		{
-			MessageId = messageId;
-			Query = new Query(text);
+			Query = new Query(query);
 		}
 	}
 }

@@ -58,17 +58,19 @@ namespace BLL.Services
 		{
 			var user = _userRepository.GetAll(u => u.ChatId == message.Chat.Id).FirstOrDefault();
 
-			var request = new Request(
+			var request = new MessageRequest(
 				message.Chat.Id,
-				message.Text);
+				message.Text,
+				user.ChatState.WaitingFor
+				);
+
+			var command = _commands.GetCommandOrDefault(request.Query.GetCommand());
 
 			if (user.IsNullOrEmpty())
 			{
 				_commands.GetErrorCommand().Invoke(request).Wait();
 				return;
 			}
-
-			var command = _commands.GetCommandOrDefault(user.ChatState.WaitingFor);
 
 			try
 			{

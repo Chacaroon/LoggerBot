@@ -28,7 +28,7 @@ namespace BLL.Commands
 		{
 			var queryRequest = (IQueryRequest)request;
 
-			string loggerId = ((IQueryRequest)request).QueryParams.GetValueOrDefault("id");
+			string loggerId = queryRequest.Query.GetQueryParam("id");
 
 			long id = long.Parse(loggerId);
 

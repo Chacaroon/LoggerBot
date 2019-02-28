@@ -29,10 +29,9 @@ namespace BLL.Services
 			var request = new QueryRequest(
 				callbackQuery.Message.Chat.Id,
 				callbackQuery.Message.Id,
-				callbackQuery.GetCommand(),
-				callbackQuery.GetQueryParams());
+				callbackQuery.Data);
 
-			var command = _commands.GetCommandOrDefault(request.Text);
+			var command = _commands.GetCommandOrDefault(request.Query.GetCommand());
 
 			try
 			{

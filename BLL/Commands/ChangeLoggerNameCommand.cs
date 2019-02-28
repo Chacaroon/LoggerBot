@@ -1,42 +1,43 @@
-﻿using BLL.MessageTemplates;
+﻿using System.Linq;
 using DAL.Models;
 using SharedKernel.BLL.Interfaces.Commands;
 using SharedKernel.BLL.Interfaces.Models;
 using SharedKernel.DAL.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class ShowPrivateTokenCommand : ICommand
+	class ChangeLoggerNameCommand : ICommand
 	{
 		private IRepository<Logger> _loggerRepository;
 		private ITelegramBot _telegramBot;
 
-		public ShowPrivateTokenCommand(
+		public ChangeLoggerNameCommand(
 			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
 		{
 			_loggerRepository = loggerRepository;
 			_telegramBot = telegramBot;
 		}
-		
+
 		public async Task Invoke(IRequest request)
 		{
-			var queryRequest = (IQueryRequest)request;
+			var messageRequest = (IMessageRequest)request;
 
-			string loggerId = queryRequest.Query.GetQueryParam("id");
+			var loggerId = long.Parse(messageRequest.Query.GetQueryParam("id"));
 
-			long id = long.Parse(loggerId);
+			var logger = _loggerRepository
+				.GetAll(l => l.Id == loggerId)
+				.First();
 
-			var token = _loggerRepository.FindById(id).PrivateToken;
+			logger.Name = request.Text;
+
+			_loggerRepository.Update(logger);
 
 			var res = await _telegramBot.SendMessageAsync(
 				request.ChatId,
-				new ShowPrivateTokenMessageTemplate(token));
+				"Имя логгера успешно изменено");
 
 			res.EnsureSuccessStatusCode();
 		}
