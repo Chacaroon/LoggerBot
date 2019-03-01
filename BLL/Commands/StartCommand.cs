@@ -27,12 +27,12 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
+			if (!IsUserExisted(request.ChatId))
+				AddUserToDatabase(request.ChatId);
+
 			await SendResponse(
 				request.ChatId,
 				new StartMessageTemplate());
-
-			if (IsUserExisted(request.ChatId))
-				AddUserToDatabase(request.ChatId);
 		}
 
 		private void AddUserToDatabase(long chatId)
@@ -43,6 +43,6 @@ namespace BLL.Commands
 		}
 
 		private bool IsUserExisted(long chatId)
-			=> _userRepository.GetAll(u => u.ChatId == chatId).FirstOrDefault().IsNullOrEmpty();
+			=> !_userRepository.GetAll(u => u.ChatId == chatId).FirstOrDefault().IsNullOrEmpty();
 	}
 }

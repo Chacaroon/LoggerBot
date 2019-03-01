@@ -15,9 +15,7 @@ namespace SharedKernel.Extensions
 				.FirstOrDefault();
 
 			if (command == null)
-				return commands
-				.Where(c => c.GetType().Name == "UndefinedCommand")
-				.FirstOrDefault();
+				return commands.GetUndefinedCommand();
 
 			return command;
 		}
@@ -25,8 +23,16 @@ namespace SharedKernel.Extensions
 		public static ICommand GetErrorCommand(this IEnumerable<ICommand> commands)
 		{
 			return commands
-				.Where(c => c.GetType().Name.IsMatch($"ErrorCommand"))
+				.Where(c => c.GetType().Name.IsMatch("ErrorCommand"))
 				.First();
+		}
+
+		public static ICommand GetUndefinedCommand(this IEnumerable<ICommand> commands)
+		{
+			return commands
+				.Where(c => c.GetType().Name.IsMatch("UndefinedCommand"))
+				.First();
+
 		}
 	}
 }

@@ -26,15 +26,15 @@ namespace BLL.Commands
 
 		public async Task Invoke(IRequest request)
 		{
-			await SendResponse(
-				request.ChatId,
-				new AddLoggerNameMessageTemplate());
-
 			var user = _userRepository.GetAll(u => u.ChatId == request.ChatId).First();
 
 			user.ChatState.WaitingFor = "AddLoggerName";
 
 			_userRepository.Update(user);
+
+			await SendResponse(
+				request.ChatId,
+				new AddLoggerNameMessageTemplate());
 		}
 	}
 }
