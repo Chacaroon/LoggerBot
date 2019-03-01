@@ -4,25 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using BLL.MessageTemplates;
 using TelegramBotApi;
 using TelegramBotApi.Types;
 
 namespace BLL.Commands
 {
-	class UndefinedCommand : ICommand
+	class UndefinedCommand : BaseCommand, ICommand
 	{
-		private ITelegramBot _telegramBot;
-
 		public UndefinedCommand(ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
 		{
-			var res = await _telegramBot.SendMessageAsync(request.ChatId, "Command is not defined :(");
-
-			res.EnsureSuccessStatusCode();
+			await SendResponse(request.ChatId, new UndefinedCommandMessageTemplate());
 		}
 	}
 }

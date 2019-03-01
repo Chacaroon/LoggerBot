@@ -13,20 +13,19 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class OnSubscribeTokenCommand : ICommand
+	class OnSubscribeTokenCommand : BaseCommand, ICommand
 	{
 		private IRepository<ApplicationUser> _userRepository;
 		private IRepository<Logger> _loggerRepository;
-		private ITelegramBot _telegramBot;
 
 		public OnSubscribeTokenCommand(
 			IRepository<ApplicationUser> userRepository,
 			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
 			_userRepository = userRepository;
 			_loggerRepository = loggerRepository;
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
@@ -55,20 +54,16 @@ namespace BLL.Commands
 
 			_userRepository.Update(user);
 
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				request.ChatId,
 				new SubscribeSuccessMessageTemplate(logger.Name));
-
-			res.EnsureSuccessStatusCode();
 		}
 
 		private async Task SendIncorrectTokenResponse(long chatId)
 		{
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				chatId,
-				"Некорректный Subscribe Token");
-
-			res.EnsureSuccessStatusCode();
+				new IncorrectSubscribeToken());
 		}
 	}
 }

@@ -13,17 +13,16 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class RemoveLoggerCommand : ICommand
+	class RemoveLoggerCommand : BaseCommand, ICommand
 	{
 		private IRepository<Logger> _loggerRepository;
-		private ITelegramBot _telegramBot;
 
 		public RemoveLoggerCommand(
 			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
 			_loggerRepository = loggerRepository;
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
@@ -44,22 +43,18 @@ namespace BLL.Commands
 
 			_loggerRepository.DeleteById(loggerId);
 
-			var res = await _telegramBot.EditMessageAsync(
+			await SendResponse(
 				queryRequest.ChatId,
 				queryRequest.MessageId,
 				new RemoveLoggerSuccessMessageTemplate());
-
-			res.EnsureSuccessStatusCode();
 		}
 
 		private async Task ProcessNoAnswer(IQueryRequest queryRequest)
 		{
-			var res = await _telegramBot.EditMessageAsync(
+			await SendResponse(
 				queryRequest.ChatId, 
 				queryRequest.MessageId,
 				new LoggerRemovingCanceledMessageTemplate());
-
-			res.EnsureSuccessStatusCode();
 		}
 	}
 }

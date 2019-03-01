@@ -11,17 +11,16 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class ShowSubscribeTokenCommand : ICommand
+	class ShowSubscribeTokenCommand : BaseCommand, ICommand
 	{
 		private IRepository<Logger> _loggerRepository;
-		private ITelegramBot _telegramBot;
 
 		public ShowSubscribeTokenCommand(
 			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
 			_loggerRepository = loggerRepository;
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
@@ -34,20 +33,16 @@ namespace BLL.Commands
 
 			var token = _loggerRepository.FindById(id).SubscribeToken;
 
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				request.ChatId,
 				new ShowSubscribeTokenMessageTemplate(token));
-
-			res.EnsureSuccessStatusCode();
 		}
 
 		private async Task SendIncorrectTokenResponse(long chatId)
 		{
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				chatId,
 				new IncorrectSubscribeTokenMessageTemplate());
-
-			res.EnsureSuccessStatusCode();
 		}
 	}
 }

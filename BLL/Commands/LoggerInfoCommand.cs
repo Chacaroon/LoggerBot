@@ -13,17 +13,16 @@ using TelegramBotApi.Types;
 
 namespace BLL.Commands
 {
-	class LoggerInfoCommand : ICommand
+	class LoggerInfoCommand : BaseCommand, ICommand
 	{
 		private IRepository<Logger> _loggerRepository;
-		private ITelegramBot _telegramBot;
 
 		public LoggerInfoCommand(
 			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
 			_loggerRepository = loggerRepository;
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
@@ -34,12 +33,10 @@ namespace BLL.Commands
 
 			var logger = _loggerRepository.FindById(id);
 
-			var res = await _telegramBot.EditMessageAsync(
+			await SendResponse(
 				queryRequest.ChatId,
 				queryRequest.MessageId,
 				new LoggerInfoMessageTemplate(logger.Name, logger.Exceptions?.Count() ?? 0, logger.Id));
-
-			res.EnsureSuccessStatusCode();
 		}
 	}
 }

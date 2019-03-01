@@ -12,16 +12,15 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class RemoveLoggerRequestCommand : ICommand
+	class RemoveLoggerRequestCommand : BaseCommand, ICommand
 	{
-		private ITelegramBot _telegramBot;
 		private IRepository<ApplicationUser> _userRepository;
 
 		public RemoveLoggerRequestCommand(
 			IRepository<ApplicationUser> userRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
-			_telegramBot = telegramBot;
 			_userRepository = userRepository;
 		}
 
@@ -29,7 +28,7 @@ namespace BLL.Commands
 		{
 			var queryRequest = (IQueryRequest)request;
 			
-			var res = await _telegramBot.EditMessageAsync(
+			await SendResponse(
 				request.ChatId,
 				queryRequest.MessageId,
 				new RemoveLoggerConfirmationMessageTemplate(queryRequest.Query.GetQueryParam("id")));

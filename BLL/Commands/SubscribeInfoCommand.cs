@@ -13,16 +13,15 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class SubscribeInfoCommand : ICommand
+	class SubscribeInfoCommand : BaseCommand, ICommand
 	{
 		private IRepository<Logger> _loggerRepository;
-		private ITelegramBot _telegramBot;
 
 		public SubscribeInfoCommand(IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
 			_loggerRepository = loggerRepository;
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
@@ -36,12 +35,10 @@ namespace BLL.Commands
 			if (logger.IsNullOrEmpty())
 				throw new KeyNotFoundException(nameof(logger));
 
-			var res = await _telegramBot.EditMessageAsync(
+			await SendResponse(
 				queryRequest.ChatId,
 				queryRequest.MessageId,
 				new SubscribeInfoMessageTemplate(logger.Name, logger.Exceptions?.Count() ?? 0));
-
-			res.EnsureSuccessStatusCode();
 		}
 	}
 }

@@ -11,17 +11,16 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class ShowPrivateTokenCommand : ICommand
+	class ShowPrivateTokenCommand : BaseCommand, ICommand
 	{
 		private IRepository<Logger> _loggerRepository;
-		private ITelegramBot _telegramBot;
 
 		public ShowPrivateTokenCommand(
 			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
 			_loggerRepository = loggerRepository;
-			_telegramBot = telegramBot;
 		}
 		
 		public async Task Invoke(IRequest request)
@@ -34,11 +33,9 @@ namespace BLL.Commands
 
 			var token = _loggerRepository.FindById(id).PrivateToken;
 
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				request.ChatId,
 				new ShowPrivateTokenMessageTemplate(token));
-
-			res.EnsureSuccessStatusCode();
 		}
 	}
 }

@@ -4,26 +4,24 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using BLL.MessageTemplates;
 using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class ErrorCommand : ICommand
+	class ErrorCommand : BaseCommand, ICommand
 	{
-		private ITelegramBot _telegramBot;
-
 		public ErrorCommand(ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
 		{
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				request.ChatId,
-				"При выполнении запроса возникла ошибка");
-
-			res.EnsureSuccessStatusCode();
+				new ErrorMessageTemplate()
+				);
 		}
 	}
 }

@@ -9,17 +9,16 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class ChangeLoggerNameCommand : ICommand
+	class ChangeLoggerNameCommand : BaseCommand, ICommand
 	{
 		private IRepository<Logger> _loggerRepository;
-		private ITelegramBot _telegramBot;
 
 		public ChangeLoggerNameCommand(
 			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
 			_loggerRepository = loggerRepository;
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
@@ -36,11 +35,9 @@ namespace BLL.Commands
 
 			_loggerRepository.Update(logger);
 
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				request.ChatId,
 				new ChangeLoggerNameSuccessMessageTemplate());
-
-			res.EnsureSuccessStatusCode();
 		}
 	}
 }

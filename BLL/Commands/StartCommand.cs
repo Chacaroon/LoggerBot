@@ -13,26 +13,23 @@ using BLL.MessageTemplates;
 
 namespace BLL.Commands
 {
-	public class StartCommand : ICommand
+	public class StartCommand : BaseCommand, ICommand
 	{
-		private ITelegramBot _telegramBot;
 		private IRepository<ApplicationUser> _userRepository;
 
 		public StartCommand(
 			ITelegramBot telegramBot,
 			IRepository<ApplicationUser> userRepository)
+			: base(telegramBot)
 		{
-			_telegramBot = telegramBot;
 			_userRepository = userRepository;
 		}
 
 		public async Task Invoke(IRequest request)
 		{
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				request.ChatId,
 				new StartMessageTemplate());
-
-			res.EnsureSuccessStatusCode();
 
 			if (IsUserExisted(request.ChatId))
 				AddUserToDatabase(request.ChatId);
