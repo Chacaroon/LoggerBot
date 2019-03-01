@@ -4,9 +4,8 @@ using System.Text;
 
 namespace SharedKernel.BLL.Interfaces.Models
 {
-	public interface IQueryRequest : IRequest
+	public interface IMessageRequest : IRequest
 	{
-		long MessageId { get; set; }
 		IQuery Query { get; set; }
 	}
 }

@@ -8,8 +8,6 @@ namespace DAL.Models
 {
 	public class Logger : Entity
 	{
-		public readonly bool IsnullOrEmpty;
-
 		public string Name { get; set; }
 		public Guid PrivateToken { get; set; }
 		public Guid SubscribeToken { get; set; }

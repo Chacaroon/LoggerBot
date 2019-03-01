@@ -6,6 +6,6 @@ namespace TelegramLogger
 {
 	class AppSettings
 	{
-		public static readonly string ApiUri = "https://31a4196a.ngrok.io/api/exception/";
+		public static readonly string ApiUri = "https://telegramloggingservice.azurewebsites.net/api/exception/";
 	}
 }

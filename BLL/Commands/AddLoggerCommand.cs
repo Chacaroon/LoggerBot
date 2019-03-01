@@ -12,32 +12,29 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	public class AddLoggerCommand : ICommand
+	public class AddLoggerCommand : BaseCommand, ICommand
 	{
-		private ITelegramBot _telegramBot;
 		private IRepository<ApplicationUser> _userRepository;
 
 		public AddLoggerCommand(
 			ITelegramBot telegramBot,
 			IRepository<ApplicationUser> userRepository)
+			: base(telegramBot)
 		{
-			_telegramBot = telegramBot;
 			_userRepository = userRepository;
 		}
 
 		public async Task Invoke(IRequest request)
 		{
-			var res = await _telegramBot.SendMessageAsync(
-				request.ChatId,
-				new AddLoggerNameMessageTemplate());
-
-			res.EnsureSuccessStatusCode();
-
 			var user = _userRepository.GetAll(u => u.ChatId == request.ChatId).First();
 
 			user.ChatState.WaitingFor = "AddLoggerName";
 
 			_userRepository.Update(user);
+
+			await SendResponse(
+				request.ChatId,
+				new AddLoggerNameMessageTemplate());
 		}
 	}
 }

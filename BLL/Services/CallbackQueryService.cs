@@ -5,6 +5,7 @@ using SharedKernel.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using TelegramBotApi;
 using TelegramBotApi.Types;
 using TelegramBotApi.Types.ReplyMarkup;
@@ -24,27 +25,26 @@ namespace BLL.Services
 			_telegramBot = telegramBot;
 		}
 
-		public void HandleRequest(CallbackQuery callbackQuery)
+		public async Task HandleRequest(CallbackQuery callbackQuery)
 		{
 			var request = new QueryRequest(
 				callbackQuery.Message.Chat.Id,
 				callbackQuery.Message.Id,
-				callbackQuery.GetCommand(),
-				callbackQuery.GetQueryParams());
+				callbackQuery.Data);
 
-			var command = _commands.GetCommandOrDefault(request.Text);
+			var command = _commands.GetCommandOrDefault(request.Query.GetCommand());
 
 			try
 			{
-				command.Invoke(request).Wait();
+				await command.Invoke(request);
 			}
 			catch
 			{
-				_commands.GetErrorCommand().Invoke(request).Wait();
+				await _commands.GetErrorCommand().Invoke(request);
 			}
 			finally
 			{
-				_telegramBot.AnswerCallbackQuery(callbackQuery.Id).Wait();
+				await _telegramBot.AnswerCallbackQuery(callbackQuery.Id);
 			}
 		}
 	}
