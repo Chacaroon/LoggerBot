@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using TelegramBotApi.Types;
 
 namespace SharedKernel.BLL.Interfaces.Services
 {
 	public interface IMessageService
 	{
-		void HandleRequest(Message message);
+		Task HandleRequest(Message message);
 	}
 }

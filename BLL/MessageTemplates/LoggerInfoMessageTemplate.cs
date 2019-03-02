@@ -25,8 +25,11 @@ namespace BLL.MessageTemplates
 
 			ReplyMarkup = new InlineKeyboardMarkup()
 				.AddRow(
-				new InlineKeyboardButton("Private Token", callbackData: $"showPrivateToken:id={loggerId}"),
-				new InlineKeyboardButton("Subscribe Token", callbackData: $"showSubscribeToken:id={loggerId}"))
+					new InlineKeyboardButton("Private Token", callbackData: $"showPrivateToken:id={loggerId}"),
+					new InlineKeyboardButton("Subscribe Token", callbackData: $"showSubscribeToken:id={loggerId}"))
+				.AddRow(
+					new InlineKeyboardButton("Изменить имя", callbackData: $"changeLoggerNameRequest:id={loggerId}"),
+					new InlineKeyboardButton("Удалить логгер", callbackData: $"removeLoggerRequest:id={loggerId}"))
 				.AddRow(
 					new InlineKeyboardButton("В меню", callbackData: "menu"));
 		}

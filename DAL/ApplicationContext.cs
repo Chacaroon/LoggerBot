@@ -31,6 +31,11 @@ namespace DAL
 				.HasOne(ul => ul.Logger)
 				.WithMany(l => l.UserLoggers)
 				.HasForeignKey(ul => ul.LoggerId);
+
+			modelBuilder.Entity<ExceptionInfo>()
+				.HasOne(ei => ei.Logger)
+				.WithMany(l => l.Exceptions)
+				.OnDelete(DeleteBehavior.Cascade);
 		}
 
 		public DbSet<ApplicationUser> Users { get; set; }

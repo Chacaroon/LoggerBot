@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using TelegramBotApi.Types;
 
 namespace BLL.Services
@@ -25,18 +26,18 @@ namespace BLL.Services
 			_userRepository = userRepository;
 		}
 
-		public void HandleRequest(Message message)
+		public async Task HandleRequest(Message message)
 		{
 			if (message.IsCommand())
 			{
-				ProcessAsCommand(message);
+				await ProcessAsCommand(message);
 				return;
 			}
 
-			ProcessAsText(message);
+			await ProcessAsText(message);
 		}
 
-		private void ProcessAsCommand(Message message)
+		private async Task ProcessAsCommand(Message message)
 		{
 			var command = _commands.GetCommandOrDefault(message.GetCommand());
 
@@ -46,29 +47,40 @@ namespace BLL.Services
 
 			try
 			{
-				command.Invoke(request).Wait();
+				await command.Invoke(request);
 			}
 			catch
 			{
-				_commands.GetErrorCommand().Invoke(request).Wait();
+				await _commands.GetErrorCommand().Invoke(request);
 			}
 		}
 
-		private void ProcessAsText(Message message)
+		private async Task ProcessAsText(Message message)
 		{
 			var user = _userRepository.GetAll(u => u.ChatId == message.Chat.Id).FirstOrDefault();
-
-			var request = new Request(
-				message.Chat.Id,
-				message.Text);
-
+			
 			if (user.IsNullOrEmpty())
 			{
-				_commands.GetErrorCommand().Invoke(request).Wait();
+				var tempRequest = new Request(message.Chat.Id, message.Text);
+
+				await _commands.GetErrorCommand().Invoke(tempRequest);
 				return;
 			}
 
-			var command = _commands.GetCommandOrDefault(user.ChatState.WaitingFor);
+			if (!user.ChatState.IsWaitingFor)
+			{
+				var tempRequest = new Request(message.Chat.Id, message.Text);
+
+				await _commands.GetUndefinedCommand().Invoke(tempRequest);
+				return;
+			}
+
+			var request = new MessageRequest(
+				message.Chat.Id,
+				message.Text,
+				user.ChatState.WaitingFor);
+
+			ICommand command = _commands.GetCommandOrDefault(request.Query.GetCommand());
 
 			try
 			{

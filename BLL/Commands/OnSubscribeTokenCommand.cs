@@ -13,27 +13,24 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class OnSubscribeTokenCommand : ICommand
+	class OnSubscribeTokenCommand : BaseCommand, ICommand
 	{
 		private IRepository<ApplicationUser> _userRepository;
 		private IRepository<Logger> _loggerRepository;
-		private ITelegramBot _telegramBot;
 
 		public OnSubscribeTokenCommand(
 			IRepository<ApplicationUser> userRepository,
 			IRepository<Logger> loggerRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
 			_userRepository = userRepository;
 			_loggerRepository = loggerRepository;
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
 		{
-			Guid subscribeToken;
-
-			if (!Guid.TryParse(request.Text, out subscribeToken))
+			if (!Guid.TryParse(request.Text, out Guid subscribeToken))
 			{
 				await SendIncorrectTokenResponse(request.ChatId);
 				return;
@@ -53,24 +50,31 @@ namespace BLL.Commands
 				.GetAll(u => u.ChatId == request.ChatId)
 				.First();
 
+			var isUserAlreadySubscribed = user
+				                              .UserLoggers
+				                              .Where(ul => ul.Logger.SubscribeToken == subscribeToken)
+				                              .Count() > 0;
+
+			if (isUserAlreadySubscribed)
+			{
+				await SendIncorrectTokenResponse(request.ChatId);
+				return;
+			}
+
 			user.AddLogger(logger, true);
 
 			_userRepository.Update(user);
 
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				request.ChatId,
 				new SubscribeSuccessMessageTemplate(logger.Name));
-
-			res.EnsureSuccessStatusCode();
 		}
 
 		private async Task SendIncorrectTokenResponse(long chatId)
 		{
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				chatId,
-				"Некорректный Subscribe Token");
-
-			res.EnsureSuccessStatusCode();
+				new IncorrectSubscribeToken());
 		}
 	}
 }

@@ -12,17 +12,16 @@ using TelegramBotApi;
 
 namespace BLL.Commands
 {
-	class SubscribeCommand : ICommand
+	class SubscribeCommand : BaseCommand, ICommand
 	{
 		private IRepository<ApplicationUser> _userRepository;
-		private ITelegramBot _telegramBot;
 
 		public SubscribeCommand(
 			IRepository<ApplicationUser> userRepository,
 			ITelegramBot telegramBot)
+			: base(telegramBot)
 		{
 			_userRepository = userRepository;
-			_telegramBot = telegramBot;
 		}
 
 		public async Task Invoke(IRequest request)
@@ -35,11 +34,9 @@ namespace BLL.Commands
 
 			_userRepository.Update(user);
 
-			var res = await _telegramBot.SendMessageAsync(
+			await SendResponse(
 				request.ChatId,
 				new SendSubscribeTokenMessageTemplate());
-
-			res.EnsureSuccessStatusCode();
 		}
 	}
 }
