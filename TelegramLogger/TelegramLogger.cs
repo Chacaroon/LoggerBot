@@ -8,12 +8,15 @@ namespace TelegramLogger
 	{
 		private string _token;
 		private LogLevel _logLevel;
+		private bool _logCustomExceptions;
 		private HttpClient _httpClient;
 
-		public TelegramLogger(string token, LogLevel logLevel)
+		public TelegramLogger(string token, LoggerOptions options)
 		{
 			_token = token;
-			_logLevel = logLevel;
+			_logCustomExceptions = options.LogCustomExceptions;
+			_logLevel = options.LogLevel;
+
 			_httpClient = new HttpClient
 			{
 				BaseAddress = new Uri(AppSettings.ApiUri)
@@ -37,7 +40,9 @@ namespace TelegramLogger
 
 			if (!IsEnabled(logLevel)) return;
 
-			if (exception.Source == "Microsoft.Extensions.Logging") return;
+			if (!_logCustomExceptions && exception is ApplicationException) return;
+
+			if (exception.InnerException is LoggerException) return;
 
 			var request = CreateExceptionModel(exception, formatter(state, exception));
 

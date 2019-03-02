@@ -6,6 +6,7 @@
     <Authors>Chacaroon</Authors>
     <Company />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
