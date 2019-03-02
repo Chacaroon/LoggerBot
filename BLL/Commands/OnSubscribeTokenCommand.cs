@@ -50,6 +50,17 @@ namespace BLL.Commands
 				.GetAll(u => u.ChatId == request.ChatId)
 				.First();
 
+			var isUserAlreadySubscribed = user
+				                              .UserLoggers
+				                              .Where(ul => ul.Logger.SubscribeToken == subscribeToken)
+				                              .Count() > 0;
+
+			if (isUserAlreadySubscribed)
+			{
+				await SendIncorrectTokenResponse(request.ChatId);
+				return;
+			}
+
 			user.AddLogger(logger, true);
 
 			_userRepository.Update(user);

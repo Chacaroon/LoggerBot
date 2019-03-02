@@ -8,17 +8,17 @@ namespace TelegramLogger
 	class TelegramLoggerProvider : ILoggerProvider
 	{
 		private string _token;
-		private LogLevel _logLevel;
+		private LoggerOptions _options;
 
-		public TelegramLoggerProvider(string token, LogLevel logLevel)
+		public TelegramLoggerProvider(string token, LoggerOptions options)
 		{
 			_token = token;
-			_logLevel = logLevel;
+			_options = options;
 		}
 
 		public ILogger CreateLogger(string categoryName)
 		{
-			return new TelegramLogger(_token, _logLevel);
+			return new TelegramLogger(_token, _options);
 		}
 
 		public void Dispose()
